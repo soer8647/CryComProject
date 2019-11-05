@@ -5,7 +5,7 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 main: $(OBJ_FILES)
-	$(CXX) -Wall -lcryptopp -o $@ $^
+	$(CXX) -Wall -o $@ $^ -lcryptopp
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) -c -o $@ $<
