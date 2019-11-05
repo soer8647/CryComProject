@@ -14,10 +14,17 @@ int main(int argc, char* argv[])
     Integer p("0xDB7C2ABF62E35E668076BEAD208B");
     Integer a("0xDB7C2ABF62E35E668076BEAD2088");
     Integer b("0x659EF8BA043916EEDE8911702B22");
+    Integer x("0x09487239995A5EE76B55F9C2F098");
+    Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
+
     ECP ec = ECP(p,a,b);
-    Point basePoint = Point(a,b); // Maybe Wrong
+    Point basePoint = Point(x,y); // Maybe Wrong
     Sender* sender = new Sender(5,1,ec,basePoint);
     Receiver* receiver = new Receiver(true, ec, basePoint);
+
+    if (!ec.VerifyPoint(basePoint)) {
+      std::cout << "bad" << std::endl;
+    }
 
     Point A = sender->choose();
     Point B = receiver->receive(A);
