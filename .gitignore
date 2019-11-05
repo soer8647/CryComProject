@@ -36,4 +36,9 @@ main
 *.out
 *.app
 
+# Codeblocks
+*.cbp
+*.depend
+*.layout
+
 # End of https://www.gitignore.io/api/c++
