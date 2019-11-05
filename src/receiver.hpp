@@ -14,4 +14,5 @@ private:
 public:
   Receiver(bool c, ECP curve, Point base);
   Point receive(Point A);
+  int compute(std::pair<int,int> ciphertexts);
 };

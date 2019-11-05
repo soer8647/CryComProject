@@ -29,8 +29,9 @@ int main(int argc, char* argv[])
     Point A = sender->choose();
     Point B = receiver->receive(A);
     std::pair<int,int> ciphertexts = sender->retrieve(B);
+    int m_c = receiver->compute(ciphertexts);
 
-    std::cout << "done" << std::endl;
+    std::cout << "done: " << m_c << std::endl;
 
     return 0;
 }

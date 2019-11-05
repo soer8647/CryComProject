@@ -10,6 +10,11 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
+
+int decrypt(int c, byte* key) {
+  return 0;
+}
+
 Receiver::Receiver(bool choice, ECP curve, Point base) {
   c = choice;
   ec = curve;
@@ -30,5 +35,15 @@ Point Receiver::receive(Point A) {
   key = H(ec, ec.Multiply(b,A) , sha3);
   return B;
 }
+
+int Receiver::compute(std::pair<int,int> ciphertexts) {
+  int m = decrypt(ciphertexts.first,key);
+  if (m == 0) { //replace with proper failstate
+    return decrypt(ciphertexts.second,key);
+  } else {
+    return m;
+  }
+}
+
 
 
