@@ -4,6 +4,7 @@
 #include "cryptopp/hrtimer.h"
 #include <cryptopp/ecp.h>
 #include "sender.hpp"
+#include "receiver.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -16,8 +17,13 @@ int main(int argc, char* argv[])
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(a,b); // Maybe Wrong
     Sender* sender = new Sender(5,1,ec,basePoint);
+    Receiver* receiver = new Receiver(true, ec, basePoint);
 
     Point A = sender->choose();
+    Point B = receiver->receive(A);
+    std::pair<int,int> ciphertexts = sender->retrieve(B);
+
+    std::cout << "done" << std::endl;
 
     return 0;
 }

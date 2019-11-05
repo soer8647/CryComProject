@@ -3,6 +3,6 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
-inline byte* H(ECP curve, Point p, SHA3* sha3);
+byte* H(ECP curve, Point p, SHA3* sha3);
 
 #endif

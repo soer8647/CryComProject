@@ -19,7 +19,7 @@ Receiver::Receiver(bool choice, ECP curve, Point base) {
 
 Point Receiver::receive(Point A) {
   if (!ec.VerifyPoint(A)) {
-    std::cout << "not point" << std::endl;
+    std::cout << "Error! not valid point" << std::endl;
     return A;
   }
   Integer b;

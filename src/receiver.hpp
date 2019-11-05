@@ -15,4 +15,3 @@ public:
   Receiver(bool c, ECP curve, Point base);
   Point receive(Point A);
 };
-

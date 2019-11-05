@@ -33,6 +33,7 @@ Point Sender::choose()
   AutoSeededRandomPool prng;
   a.Randomize(prng, length);
   A = ec.Multiply(a,g);
+
   return A;
 }
 
