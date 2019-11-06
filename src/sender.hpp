@@ -12,9 +12,10 @@ private:
   Integer a;
   Point A;
   SHA3* sha3;
+  int size_m;
 
 public:
-  Sender(byte* message0 , byte* message1, ECP curve, Point base);
+  Sender(byte* message0 , byte* message1, int size_m, ECP curve, Point base);
   Point choose();
   std::pair<byte*,byte*> retrieve(Point B);
 };

@@ -10,9 +10,10 @@ private:
   Point g;
   byte* key;
   SHA3* sha3;
+  int size_m;
 
 public:
-  Receiver(bool c, ECP curve, Point base);
+  Receiver(bool c, ECP curve, Point base, int size_m);
   Point receive(Point A);
   byte* compute(std::pair<byte*,byte*> ciphertexts);
 };
