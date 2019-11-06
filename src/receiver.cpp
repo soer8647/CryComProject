@@ -10,11 +10,18 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
-byte* decrypt(byte* cip, byte* key, int size_m) {
+byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
   byte* m = new byte[size_m];
   for(int i=0; i<size_m; i++) {
     m[i] = cip[i]^key[i];
   }
+  for(int i=size_m; i<size_k; i++) {
+    if(cip[i] != key[i]) {
+      std::cout << "Error! invalid decryption " << cip[i] << "!=" << key[i] << std::endl;
+      return NULL;
+    }
+  }
+
   return m;
 }
 
@@ -37,17 +44,15 @@ Point Receiver::receive(Point A) {
   b.Randomize(prng, length);
   Point B = ec.Add(ec.Multiply(c,A),ec.Multiply(b,g));
   key = H(ec, ec.Multiply(b,A) , sha3);
+
   return B;
 }
 
 byte* Receiver::compute(std::pair<byte*,byte*> ciphertexts) {
-  byte* m = decrypt(ciphertexts.first,key,size_m);
+  byte* m = decrypt(ciphertexts.first,key,size_m, ec.EncodedPointSize());
   if (m == NULL) { //replace with proper failstate
-    return decrypt(ciphertexts.second,key,size_m);
+    return decrypt(ciphertexts.second,key,size_m, ec.EncodedPointSize());
   } else {
     return m;
   }
 }
-
-
-

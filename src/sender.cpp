@@ -15,11 +15,15 @@ using namespace CryptoPP;
 typedef ECP::Point Point;
 
 
-byte* encrypt(byte* m, byte* key, int size_m) {
-  byte* cip = new byte[size_m];
+byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
+  byte* cip = new byte[size_k];
   for(int i=0; i<size_m; i++) {
     cip[i] = m[i]^key[i];
   }
+  for(int i=size_m; i<size_k; i++) {
+    cip[i] = key[i];
+  }
+
   return cip;
 }
 
@@ -53,8 +57,8 @@ std::pair<byte*,byte*> Sender::retrieve(Point B)
 
   byte* e0;
   byte* e1;
-  e0 = encrypt(m0 , k0, size_m);
-  e1 = encrypt(m1 , k1, size_m);
+  e0 = encrypt(m0 , k0, size_m, ec.EncodedPointSize());
+  e1 = encrypt(m1 , k1, size_m, ec.EncodedPointSize());
   std::pair<byte*,byte*> kpair (e0,e1);
   return kpair;
 }

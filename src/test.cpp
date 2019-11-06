@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     std::pair<byte*,byte*> ciphertexts = sender->retrieve(B);
     byte* m_c = receiver->compute(ciphertexts);
 
-    std::cout << "done: " << m_c[0] << std::endl;
+    std::cout << "done: " << m_c << std::endl;
 
     return 0;
 }
