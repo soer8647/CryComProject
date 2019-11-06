@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
     byte* m_0 = new byte[size_m];
     byte* m_1 = new byte[size_m];
 
-    m_1[0] = (byte)50;
+    m_1[0] = (byte)57;
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y); // Maybe Wrong
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     std::pair<byte*,byte*> ciphertexts = sender->retrieve(B);
     byte* m_c = receiver->compute(ciphertexts);
 
-    std::cout << "done: " << m_c << std::endl;
+    std::cout << "done: " << m_c[0] << std::endl;
 
     return 0;
 }
