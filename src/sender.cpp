@@ -15,11 +15,11 @@ using namespace CryptoPP;
 typedef ECP::Point Point;
 
 
-int encrypt(int m, byte* key) {
-  return 0;
+byte* encrypt(byte* m, byte* key) {
+  return m;
 }
 
-Sender::Sender(int message0 , int message1, ECP curve, Point base)
+Sender::Sender(byte* message0 , byte* message1, ECP curve, Point base)
 {
   g = base;
   ec = curve;
@@ -37,7 +37,7 @@ Point Sender::choose()
   return A;
 }
 
-std::pair<int,int> Sender::retrieve(Point B)
+std::pair<byte*,byte*> Sender::retrieve(Point B)
 {
   byte* k0;
   byte* k1;
@@ -46,9 +46,10 @@ std::pair<int,int> Sender::retrieve(Point B)
   const Point D = ec.Add(B,A_neg);
   k1 = H(ec,ec.Multiply(a,D),sha3);
 
-  int e0,e1;
+  byte* e0;
+  byte* e1;
   e0 = encrypt(m0 , k0);
   e1 = encrypt(m1 , k1);
-  std::pair<int,int> kpair (e0,e1);
+  std::pair<byte*,byte*> kpair (e0,e1);
   return kpair;
 }

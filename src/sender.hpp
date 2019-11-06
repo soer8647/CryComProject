@@ -5,7 +5,8 @@ typedef ECP::Point Point;
 
 class Sender {
 private:
-  int m0,m1;
+  byte* m0;
+  byte* m1;
   ECP ec;
   Point g;
   Integer a;
@@ -13,8 +14,8 @@ private:
   SHA3* sha3;
 
 public:
-  Sender(int message0 , int message1, ECP curve, Point base);
+  Sender(byte* message0 , byte* message1, ECP curve, Point base);
   Point choose();
-  std::pair<int,int> retrieve(Point B);
+  std::pair<byte*,byte*> retrieve(Point B);
 };
 

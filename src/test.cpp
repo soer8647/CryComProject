@@ -16,10 +16,12 @@ int main(int argc, char* argv[])
     Integer b("0x659EF8BA043916EEDE8911702B22");
     Integer x("0x09487239995A5EE76B55F9C2F098");
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
+    byte* m_0 = new byte[1];
+    byte* m_1 = new byte[1];
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y); // Maybe Wrong
-    Sender* sender = new Sender(5,1,ec,basePoint);
+    Sender* sender = new Sender(m_0,m_1,ec,basePoint);
     Receiver* receiver = new Receiver(true, ec, basePoint);
 
     if (!ec.VerifyPoint(basePoint)) {
@@ -28,8 +30,8 @@ int main(int argc, char* argv[])
 
     Point A = sender->choose();
     Point B = receiver->receive(A);
-    std::pair<int,int> ciphertexts = sender->retrieve(B);
-    int m_c = receiver->compute(ciphertexts);
+    std::pair<byte*,byte*> ciphertexts = sender->retrieve(B);
+    byte* m_c = receiver->compute(ciphertexts);
 
     std::cout << "done: " << m_c << std::endl;
 

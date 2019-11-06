@@ -11,8 +11,8 @@ using namespace CryptoPP;
 typedef ECP::Point Point;
 
 
-int decrypt(int c, byte* key) {
-  return 0;
+byte* decrypt(byte* c, byte* key) {
+  return c;
 }
 
 Receiver::Receiver(bool choice, ECP curve, Point base) {
@@ -36,9 +36,9 @@ Point Receiver::receive(Point A) {
   return B;
 }
 
-int Receiver::compute(std::pair<int,int> ciphertexts) {
-  int m = decrypt(ciphertexts.first,key);
-  if (m == 0) { //replace with proper failstate
+byte* Receiver::compute(std::pair<byte*,byte*> ciphertexts) {
+  byte* m = decrypt(ciphertexts.first,key);
+  if (m == NULL) { //replace with proper failstate
     return decrypt(ciphertexts.second,key);
   } else {
     return m;
