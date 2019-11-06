@@ -1,19 +1,5 @@
-#include <cryptopp/integer.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/nbtheory.h>
-#include <cryptopp/hrtimer.h>
-#include <cryptopp/eccrypto.h>
-#include <cryptopp/ecp.h>
-#include <cryptopp/sha3.h>
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <cmath>
 #include "sender.hpp"
 #include "utility.hpp"
-using namespace CryptoPP;
-typedef ECP::Point Point;
-
 
 byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
   byte* cip = new byte[size_k];
@@ -50,10 +36,10 @@ std::pair<byte*,byte*> Sender::retrieve(Point B)
 {
   byte* k0;
   byte* k1;
-  k0 = H(ec,ec.Multiply(a,B),sha3);
+  k0 = H(ec, A, B, ec.Multiply(a,B),sha3);
   const Point A_neg = ec.Inverse(A);
   const Point D = ec.Add(B,A_neg);
-  k1 = H(ec,ec.Multiply(a,D),sha3);
+  k1 = H(ec, A, B, ec.Multiply(a,D),sha3);
 
   byte* e0;
   byte* e1;

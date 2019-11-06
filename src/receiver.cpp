@@ -1,14 +1,5 @@
-#include <cryptopp/integer.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/nbtheory.h>
-#include <cryptopp/hrtimer.h>
-#include <cryptopp/ecp.h>
-#include <cryptopp/sha3.h>
-#include <iostream>
 #include "receiver.hpp"
 #include "utility.hpp"
-using namespace CryptoPP;
-typedef ECP::Point Point;
 
 byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
   byte* m = new byte[size_m];
@@ -21,7 +12,6 @@ byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
       return NULL;
     }
   }
-
   return m;
 }
 
@@ -43,8 +33,7 @@ Point Receiver::receive(Point A) {
   AutoSeededRandomPool prng;
   b.Randomize(prng, length);
   Point B = ec.Add(ec.Multiply(c,A),ec.Multiply(b,g));
-  key = H(ec, ec.Multiply(b,A) , sha3);
-
+  key = H(ec, A, B, ec.Multiply(b,A) , sha3);
   return B;
 }
 
