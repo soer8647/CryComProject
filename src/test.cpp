@@ -6,6 +6,7 @@
 #include "sender.hpp"
 #include "receiver.hpp"
 #include <iostream>
+#include <string>
 
 int main(int argc, char* argv[])
 {
@@ -16,11 +17,15 @@ int main(int argc, char* argv[])
     Integer b("0x659EF8BA043916EEDE8911702B22");
     Integer x("0x09487239995A5EE76B55F9C2F098");
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
-    int size_m = 1;
+    std::string s = "Hello W0rld";
+    int size_m = s.length();
     byte* m_0 = new byte[size_m];
     byte* m_1 = new byte[size_m];
 
-    m_1[0] = (byte)57;
+    for(int i=0; i<size_m; i++) {
+      m_1[i] = s.at(i);
+    }
+
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y); // Maybe Wrong
@@ -36,7 +41,10 @@ int main(int argc, char* argv[])
     std::pair<byte*,byte*> ciphertexts = sender->retrieve(B);
     byte* m_c = receiver->compute(ciphertexts);
 
-    std::cout << "done: " << m_c[0] << std::endl;
 
+    std::cout << "output: ";
+    for(int i=0; i<size_m; i++) {
+      std::cout << m_c[i];
+    }
     return 0;
 }
