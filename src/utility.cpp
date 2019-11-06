@@ -8,8 +8,8 @@ typedef ECP::Point Point;
 byte* H(ECP curve, Point p, SHA3* sha3) {
   // SEED IT using A and B
   size_t size = curve.EncodedPointSize();
-  byte* output;
-  byte* decodedPoint;
+  byte* output = new byte[size];
+  byte* decodedPoint = new byte[size];
   curve.DecodePoint(p,decodedPoint,size);
   sha3->Update(decodedPoint,size);
   sha3->TruncatedFinal(output,size);

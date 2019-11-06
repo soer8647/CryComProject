@@ -42,7 +42,10 @@ std::pair<int,int> Sender::retrieve(Point B)
   byte* k0;
   byte* k1;
   k0 = H(ec,ec.Multiply(a,B),sha3);
-  k1 = H(ec,ec.Multiply(a,ec.Add(B,ec.Inverse(A))),sha3);
+  const Point A_neg = ec.Inverse(A);
+  const Point D = ec.Add(B,A_neg);
+  k1 = H(ec,ec.Multiply(a,D),sha3);
+
   int e0,e1;
   e0 = encrypt(m0 , k0);
   e1 = encrypt(m1 , k1);
