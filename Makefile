@@ -8,5 +8,9 @@ OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 main: $(OBJ_FILES)
 	$(CXX) -std=$(VERSION) -Wall -o $@ $^ -lcryptopp
 
+clean:
+	@rm -rf $(OBJ_DIR)
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(@D)
 	$(CXX) -c -o $@ $<
