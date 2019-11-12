@@ -2,9 +2,9 @@
 #include "utility.hpp"
 
 byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
-  byte* m = new byte[size_m];
+  byte* ct = new byte[size_m];
   for(int i=0; i<size_m; i++) {
-    m[i] = cip[i]^key[i];
+    ct[i] = cip[i]^key[i];
   }
   for(int i=size_m; i<size_k; i++) {
     if(cip[i] != key[i]) {
@@ -12,32 +12,49 @@ byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
       return NULL;
     }
   }
-  return m;
+  return ct;
 }
 
-Receiver::Receiver(int choice, ECP curve, Point base, int size_msg) {
-  c = choice;
+Receiver::Receiver(int* choices, ECP curve, Point base, int size_msg, int m_rounds) {
+  c_lst_p = choices;
   ec = curve;
   g = base;
   sha3 = new SHA3_256();
   size_m = size_msg;
+  m = m_rounds;
 }
 
-Point Receiver::receive(Point A) {
-  if (!ec.VerifyPoint(A)) {
+Point* Receiver::receive(Point S) {
+  if (!ec.VerifyPoint(S)) {
     std::cout << "Error! not valid point" << std::endl;
-    return A;
+    return NULL;
   }
 
-  Integer b;
-  int length = 4096;
-  AutoSeededRandomPool prng;
-  b.Randomize(prng, length);
-  Point B = ec.Add(ec.Multiply(c,A),ec.Multiply(b,g));
-  key = H(ec, A, B, ec.Multiply(b,A), sha3);
-  return B;
+  //TODO get static value m instead of 5
+  static Integer xs[3] = {};
+  static Point R_lst[3] = {};
+  static byte* key_lst[3] = {};
+
+  for(int i=0; i<m; i++) {
+    Integer x;
+    int length = 4096;
+    AutoSeededRandomPool prng;
+    x.Randomize(prng, length);
+    Point R = ec.Add(ec.Multiply(*(c_lst_p+0),S), ec.Multiply(x,g));
+    byte* key = H(ec, S, R, ec.Multiply(x,S), sha3);
+
+    xs[i] = x;
+    R_lst[i] = R;
+    key_lst[i] = key;
+  }
+
+  keys_p = key_lst;
+
+  return R_lst;
 }
 
-byte* Receiver::compute(byte** ciphertexts_p) {
-  return decrypt(*(ciphertexts_p+c), key, size_m, ec.EncodedPointSize());
+byte* Receiver::compute(byte*** rounds_p) {
+  int i=0;
+  byte** ciphertexts_p = *(rounds_p+i);
+  return decrypt(*(ciphertexts_p+*(c_lst_p+i)), *(keys_p+i), size_m, ec.EncodedPointSize());
 }

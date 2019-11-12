@@ -17,15 +17,16 @@ private:
   byte** msgs;
   ECP ec;
   Point g;
-  Integer a;
-  Point A;
+  Integer y;
+  Point S;
   SHA3* sha3;
   int size_m;
   int n;
+  int m;
 
 public:
-  Sender(byte* msages[], int size_m, ECP curve, Point base, int nr);
+  Sender(byte* msages[], int size_m, ECP curve, Point base, int n, int m);
   Point choose();
-  byte** retrieve(Point B);
+  byte*** retrieve(Point* R_lst_p);
 };
 

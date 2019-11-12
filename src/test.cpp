@@ -48,26 +48,30 @@ int main(int argc, char* argv[])
     Integer x("0x09487239995A5EE76B55F9C2F098");
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
 
-    int c = 3;
-    std::string msgs[] = {"besked 0", "besked 1", "besked 2", "besked 3", "besked 4"};
+    int c_lst[] = {0, 1, 2, 3, 4};
+    std::string msgs[3][5] = {{"besked a0", "besked a1", "besked a2", "besked a3", "besked a4"},
+                              {"besked b0", "besked b1", "besked b2", "besked b3", "besked b4"},
+                              {"besked c0", "besked c1", "besked c2", "besked c3", "besked c4"}};
+
     auto t1 = std::chrono::high_resolution_clock::now();
-    static int n = (sizeof(msgs)/sizeof(*msgs));
+    static int n = 5; //TODO
+    static int m = 3; //TODO
     byte* bytes[n] = {};
-    int size_m = stringsToByte(msgs, n, bytes);
+    int size_m = stringsToByte(msgs[0], n, bytes); //TODO
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y);
-    Sender* sender = new Sender(bytes, size_m, ec, basePoint, n);
-    Receiver* receiver = new Receiver(c, ec, basePoint, size_m);
+    Sender* sender = new Sender(bytes, size_m, ec, basePoint, n, m);
+    Receiver* receiver = new Receiver(c_lst, ec, basePoint, size_m, m);
 
     if (!ec.VerifyPoint(basePoint)) {
       std::cout << "bad" << std::endl;
     }
 
-    Point A = sender->choose();
-    Point B = receiver->receive(A);
-    byte** ciphertexts_p = sender->retrieve(B);
-    byte* m_c = receiver->compute(ciphertexts_p);
+    Point S = sender->choose();
+    Point* R_lst_p = receiver->receive(S);
+    byte*** rounds_p = sender->retrieve(R_lst_p);
+    byte* m_c = receiver->compute(rounds_p);
     auto t2 = std::chrono::high_resolution_clock::now();
     printResult(m_c, t1, t2, size_m);
 
