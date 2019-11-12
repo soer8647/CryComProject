@@ -38,10 +38,9 @@ Point Receiver::receive(Point A) {
 }
 
 byte* Receiver::compute(std::pair<byte*,byte*> ciphertexts) {
-  byte* m = decrypt(ciphertexts.first,key,size_m, ec.EncodedPointSize());
-  if (m == NULL) { //replace with proper failstate
+  if (c) {
     return decrypt(ciphertexts.second,key,size_m, ec.EncodedPointSize());
   } else {
-    return m;
+    return decrypt(ciphertexts.first,key,size_m, ec.EncodedPointSize());
   }
 }
