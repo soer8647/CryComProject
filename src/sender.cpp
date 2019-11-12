@@ -13,17 +13,16 @@ byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
   return cip;
 }
 
-Sender::Sender(byte* message0 , byte* message1, int size_msg, ECP curve, Point base)
-{
+Sender::Sender(byte* msages[], int size_msg, ECP curve, Point base, int nr) {
   size_m = size_msg;
   g = base;
   ec = curve;
-  m0 = message0;
-  m1 = message1;
+  msgs = msages;
   sha3 = new SHA3_256();
+  n = nr;
 }
-Point Sender::choose()
-{
+
+Point Sender::choose() {
   int length = 4096;
   AutoSeededRandomPool prng;
   a.Randomize(prng, length);
@@ -32,17 +31,17 @@ Point Sender::choose()
   return A;
 }
 
-std::pair<byte*,byte*> Sender::retrieve(Point B)
-{
-  byte* k0 = H(ec, A, B, ec.Multiply(a,B),sha3);
-  const Point A_neg = ec.Inverse(A);
-  const Point D = ec.Add(B,A_neg);
-  byte* k1 = H(ec, A, B, ec.Multiply(a,D),sha3);
+byte** Sender::retrieve(Point B) {
+  static byte* ciphers[3]; //TODO get static value n instead
 
-  byte* e0;
-  byte* e1;
-  e0 = encrypt(m0 , k0, size_m, ec.EncodedPointSize());
-  e1 = encrypt(m1 , k1, size_m, ec.EncodedPointSize());
-  std::pair<byte*,byte*> kpair (e0,e1);
-  return kpair;
+  for(int i=0; i<n; i++) {
+   const Point yR = ec.Multiply(a, B);
+   const Point T = ec.Multiply(a, A);
+   const Point jT = ec.Multiply(i, T);
+    byte* ki = H(ec, A, B, ec.Add(yR, ec.Inverse(jT)), sha3);
+    byte* e = encrypt(msgs[i], ki, size_m, ec.EncodedPointSize());
+    ciphers[i] = e;
+  }
+
+  return ciphers;
 }

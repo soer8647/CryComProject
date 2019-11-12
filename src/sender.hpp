@@ -14,18 +14,18 @@ typedef ECP::Point Point;
 
 class Sender {
 private:
-  byte* m0;
-  byte* m1;
+  byte** msgs;
   ECP ec;
   Point g;
   Integer a;
   Point A;
   SHA3* sha3;
   int size_m;
+  int n;
 
 public:
-  Sender(byte* message0 , byte* message1, int size_m, ECP curve, Point base);
+  Sender(byte* msages[], int size_m, ECP curve, Point base, int nr);
   Point choose();
-  std::pair<byte*,byte*> retrieve(Point B);
+  byte** retrieve(Point B);
 };
 

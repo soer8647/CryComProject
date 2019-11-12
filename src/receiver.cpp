@@ -15,7 +15,7 @@ byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
   return m;
 }
 
-Receiver::Receiver(bool choice, ECP curve, Point base, int size_msg) {
+Receiver::Receiver(int choice, ECP curve, Point base, int size_msg) {
   c = choice;
   ec = curve;
   g = base;
@@ -28,19 +28,16 @@ Point Receiver::receive(Point A) {
     std::cout << "Error! not valid point" << std::endl;
     return A;
   }
+
   Integer b;
   int length = 4096;
   AutoSeededRandomPool prng;
   b.Randomize(prng, length);
   Point B = ec.Add(ec.Multiply(c,A),ec.Multiply(b,g));
-  key = H(ec, A, B, ec.Multiply(b,A) , sha3);
+  key = H(ec, A, B, ec.Multiply(b,A), sha3);
   return B;
 }
 
-byte* Receiver::compute(std::pair<byte*,byte*> ciphertexts) {
-  if (c) {
-    return decrypt(ciphertexts.second,key,size_m, ec.EncodedPointSize());
-  } else {
-    return decrypt(ciphertexts.first,key,size_m, ec.EncodedPointSize());
-  }
+byte* Receiver::compute(byte** ciphertexts_p) {
+  return decrypt(*(ciphertexts_p+c), key, size_m, ec.EncodedPointSize());
 }

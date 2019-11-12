@@ -12,7 +12,7 @@ typedef ECP::Point Point;
 
 class Receiver {
 private:
-  bool c;
+  int c;
   ECP ec;
   Point g;
   byte* key;
@@ -20,7 +20,7 @@ private:
   int size_m;
 
 public:
-  Receiver(bool c, ECP curve, Point base, int size_m);
+  Receiver(int c, ECP curve, Point base, int size_m);
   Point receive(Point A);
-  byte* compute(std::pair<byte*,byte*> ciphertexts);
+  byte* compute(byte** ciphertexts);
 };
