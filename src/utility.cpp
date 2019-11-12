@@ -16,3 +16,25 @@ byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3) {
   return output;
 }
 
+bool byte_xor(std::vector<byte> output, std::vector<byte> a, std::vector<byte> b) {
+  return 1;
+}
+
+bool bit_xor(std::vector<byte> output, std::vector<byte> a, std::vector<bool> b) {
+  return 1;
+}
+
+
+std::vector<byte> G(std::vector<byte> input){
+  return input;
+}
+
+std::vector<byte> G(std::vector<bool> input) {
+  std::vector<byte> s;
+  return s;
+}
+
+
+std::vector<byte> H_extension(int seed, std::vector<byte> input){
+  return input;
+}
