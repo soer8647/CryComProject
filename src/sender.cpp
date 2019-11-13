@@ -33,7 +33,7 @@ Point Sender::choose() {
 }
 
 byte*** Sender::retrieve(Point* R_lst_p) {
-  static byte** rounds[3]; //TODO get static value m instead of 5
+  static byte** rounds[3]; //TODO get static value m instead of 3
 
   for(int i=0; i<m; i++) {
     static byte* ciphers[5]; //TODO get static value n instead of 5

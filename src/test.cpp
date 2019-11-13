@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     Integer x("0x09487239995A5EE76B55F9C2F098");
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
 
-    int c_lst[] = {0, 1, 2, 3, 4};
+    int c_lst[] = {0, 1, 2};
     std::vector<std::vector<std::string>> msgs = {{"besked a0", "besked a1", "besked a2", "besked a3", "besked a4"},
                                                   {"besked b0", "besked b1", "besked b2", "besked b3", "besked b4"},
                                                   {"besked c0", "besked c1", "besked c2", "besked c3", "besked c4"}};

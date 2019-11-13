@@ -30,7 +30,7 @@ Point* Receiver::receive(Point S) {
     return NULL;
   }
 
-  //TODO get static value m instead of 5
+  //TODO get static value m instead
   static Integer xs[3] = {};
   static Point R_lst[3] = {};
   static byte* key_lst[3] = {};
@@ -40,21 +40,25 @@ Point* Receiver::receive(Point S) {
     int length = 4096;
     AutoSeededRandomPool prng;
     x.Randomize(prng, length);
-    Point R = ec.Add(ec.Multiply(*(c_lst_p+0),S), ec.Multiply(x,g));
+    Point R = ec.Add(ec.Multiply(*(c_lst_p+i),S), ec.Multiply(x,g));
     byte* key = H(ec, S, R, ec.Multiply(x,S), sha3);
 
     xs[i] = x;
     R_lst[i] = R;
     key_lst[i] = key;
   }
-
   keys_p = key_lst;
 
   return R_lst;
 }
 
 byte* Receiver::compute(byte*** rounds_p) {
-  int i=0;
-  byte** ciphertexts_p = *(rounds_p+i);
-  return decrypt(*(ciphertexts_p+*(c_lst_p+i)), *(keys_p+i), size_m, ec.EncodedPointSize());
+  std::vector<byte*> clear_texts;
+  for(int r=0; r<m; r++) {
+    byte** ciphertexts_p = *(rounds_p+r);
+    byte* clear_text = decrypt(*(ciphertexts_p+*(c_lst_p+r)), *(keys_p+r), size_m, ec.EncodedPointSize());
+    clear_texts.push_back(clear_text);
+  }
+
+  return clear_texts[0];
 }
