@@ -9,6 +9,7 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#include "ExtensionProtocol.hpp"
 
 std::vector<std::vector<byte*>> stringsToByte(std::vector<std::vector<std::string>> msgs, int m, int n) {
   int size_m_max = 0;
@@ -86,5 +87,30 @@ int main(int argc, char* argv[]) {
     auto t2 = std::chrono::high_resolution_clock::now();
     printResult(clear_texts, t1, t2, size_m, m);
 
+    std::cout << "output: ";
+    for(int i=0; i<size_m; i++) {
+      std::cout << m_c[i];
+    }
+    std::cout << " in time: " << duration << std::endl;
+
+    int n = 3;
+    int k = 2;
+    int size_message = 2;
+
+    std::vector<bool> choices;
+    choices.push_back(true);
+    choices.push_back(false);
+    choices.push_back(true);
+
+    std::vector<std::pair<std::vector<byte>,std::vector<byte>>> messages;
+    messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
+    messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
+    messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
+
+    ExtensionSender* eSender = new ExtensionSender(messages,n,k,size_message);
+    ExtensionReceiver* eReceiver = new ExtensionReceiver(choices,n,k,size_message);
+
+    std::vector<std::vector<byte>> chosen_msg = f(eSender,eReceiver);
+    std::cout << chosen_msg[0][0] << chosen_msg[1][0] << chosen_msg[2][0] << std::endl;
     return 0;
 }

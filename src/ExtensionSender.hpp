@@ -12,11 +12,13 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
+#ifndef INCLUDED_Exten_sender
+#define INCLUDED_Exten_sender
+
 class ExtensionSender {
 private:
   int n;
   int k;
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> key;
   std::vector<std::pair<std::vector<byte>,std::vector<byte>>> x;
   int size_m;
   std::vector<bool> s;
@@ -26,3 +28,5 @@ public:
   std::vector<bool> basePhase();
   std::vector<std::pair<std::vector<byte>,std::vector<byte>>> extensionPhase2(std::vector<std::vector<byte>> u, std::vector<std::vector<byte>> chosenSeeds);
 };
+
+#endif

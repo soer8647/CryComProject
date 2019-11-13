@@ -12,6 +12,8 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
+#ifndef INCLUDED_sender
+#define INCLUDED_sender
 class Sender {
 private:
   std::vector<std::vector<byte*>> msgs;
@@ -30,3 +32,4 @@ public:
   std::vector<std::vector<byte*>> retrieve(Point* R_lst_p);
 };
 
+#endif

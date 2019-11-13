@@ -10,6 +10,8 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
+#ifndef INCLUDED_receiver
+#define INCLUDED_receiver
 class Receiver {
 private:
   int* c_lst_p;
@@ -25,3 +27,5 @@ public:
   Point* receive(Point A);
   std::vector<byte*> compute(std::vector<std::vector<byte*>> ciphers);
 };
+
+#endif

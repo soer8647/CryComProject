@@ -1,4 +1,5 @@
 #include "utility.hpp"
+#include "cryptopp/randpool.h"
 
 byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3) {
   size_t size = curve.EncodedPointSize();
@@ -16,25 +17,36 @@ byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3) {
   return output;
 }
 
-bool byte_xor(std::vector<byte> output, std::vector<byte> a, std::vector<byte> b) {
-  return 1;
+std::vector<byte> byte_xor(std::vector<byte> a, std::vector<byte> b) {
+  std::vector<byte> output;
+  for(int i=0; i<a.size(); i++) {
+    output.push_back(a[i] ^ b[i]);
+  }
+  return output;
 }
 
-bool bit_xor(std::vector<byte> output, std::vector<byte> a, std::vector<bool> b) {
-  return 1;
+std::vector<byte> bit_xor(std::vector<byte> a, std::vector<bool> b) {
+  std::vector<byte> output;
+  for(int i=0; i<a.size(); i++) {
+    output.push_back(a[i]^b[i]);
+  }
+  return output;
 }
 
-
-std::vector<byte> G(std::vector<byte> input){
-  return input;
+std::vector<byte> G(std::vector<byte> input, int size){
+  RandomPool rng;
+  rng.IncorporateEntropy(&input[0], size);
+  byte* output = new byte[size];
+  rng.GenerateBlock(output,size);
+  std::vector<byte> output_vector(output, size + output);
+  return output_vector;
 }
 
-std::vector<byte> G(std::vector<bool> input) {
-  std::vector<byte> s;
-  return s;
-}
-
-
-std::vector<byte> H_extension(int seed, std::vector<byte> input){
-  return input;
+std::vector<byte> H_extension(int seed, std::vector<byte> input, int size, SHA3* sha3){
+  sha3->Update(static_cast<byte*>(static_cast<void*>(&seed)),sizeof seed);
+  sha3->Update(&input[0],input.size());
+  byte* output = new byte[size];
+  sha3->TruncatedFinal(output,size);
+  std::vector<byte> output_vector(output,size + output);
+  return output_vector;
 }
