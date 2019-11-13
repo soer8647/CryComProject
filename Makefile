@@ -6,11 +6,11 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 main: $(OBJ_FILES)
-	$(CXX) -std=$(VERSION) -Wall -o $@ $^ -lcryptopp
+	$(CXX) -std=$(VERSION) -Wall -g -o $@ $^ -lcryptopp
 
 clean:
 	@rm -rf $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(@D)
-	$(CXX) -c -o $@ $<
+	$(CXX) -c -g -o $@ $<

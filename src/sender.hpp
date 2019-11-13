@@ -12,6 +12,8 @@
 using namespace CryptoPP;
 typedef ECP::Point Point;
 
+#ifndef INCLUDED_sender
+#define INCLUDED_sender
 class Sender {
 private:
   byte* m0;
@@ -29,3 +31,4 @@ public:
   std::pair<byte*,byte*> retrieve(Point B);
 };
 
+#endif
