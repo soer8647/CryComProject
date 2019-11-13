@@ -13,7 +13,7 @@ byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
   return cip;
 }
 
-Sender::Sender(byte* msages[], int size_msg, ECP curve, Point base, int nr, int m_rounds) {
+Sender::Sender(std::vector<std::vector<byte*>> msages, int size_msg, ECP curve, Point base, int nr, int m_rounds) {
   size_m = size_msg;
   g = base;
   ec = curve;
@@ -32,22 +32,21 @@ Point Sender::choose() {
   return S;
 }
 
-byte*** Sender::retrieve(Point* R_lst_p) {
-  static byte** rounds[3]; //TODO get static value m instead of 5
+std::vector<std::vector<byte*>> Sender::retrieve(std::vector<Point> R_lst) {
+  std::vector<std::vector<byte*>> rounds;
 
   for(int i=0; i<m; i++) {
-    static byte* ciphers[5]; //TODO get static value n instead of 5
+    std::vector<byte*> ciphers2;
 
     for(int j=0; j<n; j++) {
-      const Point yR = ec.Multiply(y, *(R_lst_p+0));
+      const Point yR = ec.Multiply(y, R_lst[i]);
       const Point T = ec.Multiply(y, S);
       const Point jT = ec.Multiply(j, T);
-      byte* kj = H(ec, S, *(R_lst_p+0), ec.Add(yR, ec.Inverse(jT)), sha3);
-      byte* e = encrypt(msgs[j], kj, size_m, ec.EncodedPointSize());
-      ciphers[j] = e;
+      byte* kj = H(ec, S, R_lst[i], ec.Add(yR, ec.Inverse(jT)), sha3);
+      byte* e = encrypt(msgs[i][j], kj, size_m, ec.EncodedPointSize());
+      ciphers2.push_back(e);
     }
-
-    rounds[i] = ciphers;
+    rounds.push_back(ciphers2);
   }
 
   return rounds;

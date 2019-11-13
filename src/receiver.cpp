@@ -24,37 +24,38 @@ Receiver::Receiver(int* choices, ECP curve, Point base, int size_msg, int m_roun
   m = m_rounds;
 }
 
-Point* Receiver::receive(Point S) {
+std::vector<Point> Receiver::receive(Point S) {
   if (!ec.VerifyPoint(S)) {
     std::cout << "Error! not valid point" << std::endl;
-    return NULL;
+    return {};
   }
 
-  //TODO get static value m instead of 5
-  static Integer xs[3] = {};
-  static Point R_lst[3] = {};
-  static byte* key_lst[3] = {};
+  std::vector<Integer> xs;
+  std::vector<Point> R_lst;
 
   for(int i=0; i<m; i++) {
     Integer x;
     int length = 4096;
     AutoSeededRandomPool prng;
     x.Randomize(prng, length);
-    Point R = ec.Add(ec.Multiply(*(c_lst_p+0),S), ec.Multiply(x,g));
+    Point R = ec.Add(ec.Multiply(*(c_lst_p+i),S), ec.Multiply(x,g));
     byte* key = H(ec, S, R, ec.Multiply(x,S), sha3);
 
-    xs[i] = x;
-    R_lst[i] = R;
-    key_lst[i] = key;
+    xs.push_back(x);
+    key_lst.push_back(key);
+    R_lst.push_back(R);
   }
-
-  keys_p = key_lst;
 
   return R_lst;
 }
 
-byte* Receiver::compute(byte*** rounds_p) {
-  int i=0;
-  byte** ciphertexts_p = *(rounds_p+i);
-  return decrypt(*(ciphertexts_p+*(c_lst_p+i)), *(keys_p+i), size_m, ec.EncodedPointSize());
+std::vector<byte*> Receiver::compute(std::vector<std::vector<byte*>> ciphers) {
+  std::vector<byte*> clear_texts;
+  for(int i=0; i<m; i++) {
+    int c = *(c_lst_p+i);
+    byte* clear_text = decrypt(ciphers[i][c], key_lst[i], size_m, ec.EncodedPointSize());
+    clear_texts.push_back(clear_text);
+  }
+
+  return clear_texts;
 }

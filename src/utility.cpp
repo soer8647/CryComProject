@@ -13,7 +13,10 @@ byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3) {
   byte* decodedPoint = new byte[size];
   curve.EncodePoint(decodedPoint,p,false);
   sha3->Update(decodedPoint,size);
-  sha3->TruncatedFinal(output,size);
+  sha3->TruncatedFinal(output,32);
+  rep(i,33,size) { // TODO Fix this
+    output[i] = '0';
+  }
   return output;
 }
 
