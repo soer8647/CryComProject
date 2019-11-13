@@ -32,17 +32,17 @@ Point Sender::choose() {
   return S;
 }
 
-std::vector<std::vector<byte*>> Sender::retrieve(Point* R_lst_p) {
+std::vector<std::vector<byte*>> Sender::retrieve(std::vector<Point> R_lst) {
   std::vector<std::vector<byte*>> rounds;
 
   for(int i=0; i<m; i++) {
     std::vector<byte*> ciphers2;
 
     for(int j=0; j<n; j++) {
-      const Point yR = ec.Multiply(y, *(R_lst_p+i));
+      const Point yR = ec.Multiply(y, R_lst[i]);
       const Point T = ec.Multiply(y, S);
       const Point jT = ec.Multiply(j, T);
-      byte* kj = H(ec, S, *(R_lst_p+i), ec.Add(yR, ec.Inverse(jT)), sha3);
+      byte* kj = H(ec, S, R_lst[i], ec.Add(yR, ec.Inverse(jT)), sha3);
       byte* e = encrypt(msgs[i][j], kj, size_m, ec.EncodedPointSize());
       ciphers2.push_back(e);
     }

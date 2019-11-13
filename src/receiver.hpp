@@ -17,14 +17,14 @@ private:
   int* c_lst_p;
   ECP ec;
   Point g;
-  byte** keys_p;
+  std::vector<byte*> key_lst;
   SHA3* sha3;
   int size_m;
   int m;
 
 public:
   Receiver(int* c_lst_p, ECP curve, Point base, int size_m, int m);
-  Point* receive(Point A);
+  std::vector<Point> receive(Point A);
   std::vector<byte*> compute(std::vector<std::vector<byte*>> ciphers);
 };
 

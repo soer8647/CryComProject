@@ -29,7 +29,7 @@ private:
 public:
   Sender(std::vector<std::vector<byte*>> msgs, int size_m, ECP curve, Point base, int n, int m);
   Point choose();
-  std::vector<std::vector<byte*>> retrieve(Point* R_lst_p);
+  std::vector<std::vector<byte*>> retrieve(std::vector<Point> R_lst_p);
 };
 
 #endif

@@ -65,10 +65,10 @@ int main(int argc, char* argv[]) {
       std::cout << "bad" << std::endl;
     }
 
-    int c_lst[] = {4, 3, 2};
-    std::vector<std::vector<std::string>> msgs = {{"a0", "a1", "a2", "a3", "a4"},
-                                                  {"b0", "b1", "b2", "b3", "b4"},
-                                                  {"c0", "c1", "c2", "c3", "c4"}};
+    int c_lst[] = {1, 0, 1};
+    std::vector<std::vector<std::string>> msgs = {{"a0", "a1"},
+                                                  {"b0", "b1"},
+                                                  {"c0", "c1"}};
 
     auto t1 = std::chrono::high_resolution_clock::now();
     static int m = msgs.size();
@@ -81,8 +81,8 @@ int main(int argc, char* argv[]) {
     Receiver* receiver = new Receiver(c_lst, ec, basePoint, size_message, m);
 
     Point S = sender->choose();
-    Point* R_lst_p = receiver->receive(S);
-    std::vector<std::vector<byte*>> ciphers = sender->retrieve(R_lst_p);
+    std::vector<Point> R_lst = receiver->receive(S);
+    std::vector<std::vector<byte*>> ciphers = sender->retrieve(R_lst);
     std::vector<byte*> clear_texts = receiver->compute(ciphers);
 
     auto t2 = std::chrono::high_resolution_clock::now();
