@@ -10,6 +10,35 @@
 #include <string>
 #include "ExtensionProtocol.hpp"
 
+int stringsToByte(std::string msgs[], int n, byte* bytes[]) {
+  int size_m_max = 0;
+  for(int i=0; i<n; i++) {
+    std::string m = msgs[i];
+    int size_m = m.length();
+    byte* mbyte = new byte[size_m];
+
+    for(int j=0; j<size_m; j++) {
+      mbyte[j] = m.at(j);
+    }
+
+    if(size_m_max < size_m) {
+      size_m_max = size_m;
+    }
+
+    bytes[i] = mbyte;
+  }
+  return size_m_max;
+}
+
+void printResult(byte* m_c, auto t1, auto t2, int size_m) {
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+    std::cout << "output: '";
+    for(int i=0; i<size_m; i++) {
+      std::cout << m_c[i];
+    }
+    std::cout << "' in time: " << duration << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
     using namespace CryptoPP;
@@ -20,32 +49,32 @@ int main(int argc, char* argv[])
     Integer x("0x09487239995A5EE76B55F9C2F098");
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-    std::string s = "Hello W0rld";
-    int size_m = s.length();
-    byte* m_0 = new byte[size_m];
-    byte* m_1 = new byte[size_m];
+    int c_lst[] = {0, 1, 2, 3, 4};
+    std::string msgs[3][5] = {{"besked a0", "besked a1", "besked a2", "besked a3", "besked a4"},
+                              {"besked b0", "besked b1", "besked b2", "besked b3", "besked b4"},
+                              {"besked c0", "besked c1", "besked c2", "besked c3", "besked c4"}};
 
-    for(int i=0; i<size_m; i++) {
-      m_1[i] = s.at(i);
-    }
+    auto t1 = std::chrono::high_resolution_clock::now();
+    static int n = 5; //TODO
+    static int m = 3; //TODO
+    byte* bytes[n] = {};
+    int size_m = stringsToByte(msgs[0], n, bytes); //TODO
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y);
-    Sender* sender = new Sender(m_0,m_1,size_m,ec,basePoint);
-    Receiver* receiver = new Receiver(false, ec, basePoint, size_m);
+    Sender* sender = new Sender(bytes, size_m, ec, basePoint, n, m);
+    Receiver* receiver = new Receiver(c_lst, ec, basePoint, size_m, m);
 
     if (!ec.VerifyPoint(basePoint)) {
       std::cout << "bad" << std::endl;
     }
 
-    Point A = sender->choose();
-    Point B = receiver->receive(A);
-    std::pair<byte*,byte*> ciphertexts = sender->retrieve(B);
-    byte* m_c = receiver->compute(ciphertexts);
-
+    Point S = sender->choose();
+    Point* R_lst_p = receiver->receive(S);
+    byte*** rounds_p = sender->retrieve(R_lst_p);
+    byte* m_c = receiver->compute(rounds_p);
     auto t2 = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+    printResult(m_c, t1, t2, size_m);
 
     std::cout << "output: ";
     for(int i=0; i<size_m; i++) {
