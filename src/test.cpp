@@ -92,14 +92,13 @@ int main(int argc, char* argv[]) {
     choices.push_back(true);
     choices.push_back(false);
     choices.push_back(true);
-
     std::vector<std::pair<std::vector<byte>,std::vector<byte>>> messages;
     messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
     messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
     messages.push_back(std::pair<std::vector<byte>,std::vector<byte>>(std::vector<byte> {'A' , 'A'} , std::vector<byte> {'B' , 'B'}));
 
-    ExtensionSender* eSender = new ExtensionSender(messages,n,k,size_message);
-    ExtensionReceiver* eReceiver = new ExtensionReceiver(choices,n,k,size_message);
+    ExtensionSender* eSender = new ExtensionSender(messages,m,k,size_message);
+    ExtensionReceiver* eReceiver = new ExtensionReceiver(choices,m,k,size_message);
 
     std::vector<std::vector<byte>> chosen_msg = f(eSender,eReceiver);
     std::cout << chosen_msg[0][0] << chosen_msg[1][0] << chosen_msg[2][0] << std::endl;
