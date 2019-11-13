@@ -66,18 +66,19 @@ int main(int argc, char* argv[]) {
     }
 
     int c_lst[] = {4, 3, 2};
-    std::vector<std::vector<std::string>> msgs = {{"besked a0", "besked a1", "besked a2", "besked a3", "korrekt"},
-                                                  {"besked b0", "besked b1", "besked b2", "korrekt", "besked b4"},
-                                                  {"besked c0", "besked c1", "korrekt", "besked c3", "besked c4"}};
+    std::vector<std::vector<std::string>> msgs = {{"a0", "a1", "a2", "a3", "a4"},
+                                                  {"b0", "b1", "b2", "b3", "b4"},
+                                                  {"c0", "c1", "c2", "c3", "c4"}};
 
     auto t1 = std::chrono::high_resolution_clock::now();
-    static int m = 3;
-    static int n = 5;
-    int size_m = 9; //TODO, fake code
+    static int m = msgs.size();
+    static int n = msgs[0].size();
+    int k = 2;
+    int size_message = 2;
     std::vector<std::vector<byte*>> bytes = stringsToByte(msgs, m, n);
 
-    Sender* sender = new Sender(bytes, size_m, ec, basePoint, n, m);
-    Receiver* receiver = new Receiver(c_lst, ec, basePoint, size_m, m);
+    Sender* sender = new Sender(bytes, size_message, ec, basePoint, n, m);
+    Receiver* receiver = new Receiver(c_lst, ec, basePoint, size_message, m);
 
     Point S = sender->choose();
     Point* R_lst_p = receiver->receive(S);
@@ -85,17 +86,7 @@ int main(int argc, char* argv[]) {
     std::vector<byte*> clear_texts = receiver->compute(ciphers);
 
     auto t2 = std::chrono::high_resolution_clock::now();
-    printResult(clear_texts, t1, t2, size_m, m);
-
-    std::cout << "output: ";
-    for(int i=0; i<size_m; i++) {
-      std::cout << m_c[i];
-    }
-    std::cout << " in time: " << duration << std::endl;
-
-    int n = 3;
-    int k = 2;
-    int size_message = 2;
+    printResult(clear_texts, t1, t2, size_message, m);
 
     std::vector<bool> choices;
     choices.push_back(true);
@@ -112,5 +103,6 @@ int main(int argc, char* argv[]) {
 
     std::vector<std::vector<byte>> chosen_msg = f(eSender,eReceiver);
     std::cout << chosen_msg[0][0] << chosen_msg[1][0] << chosen_msg[2][0] << std::endl;
+
     return 0;
 }
