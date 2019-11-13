@@ -13,7 +13,7 @@ byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
   return cip;
 }
 
-Sender::Sender(byte* msages[], int size_msg, ECP curve, Point base, int nr, int m_rounds) {
+Sender::Sender(std::vector<std::vector<byte*>> msages, int size_msg, ECP curve, Point base, int nr, int m_rounds) {
   size_m = size_msg;
   g = base;
   ec = curve;
@@ -43,7 +43,7 @@ byte*** Sender::retrieve(Point* R_lst_p) {
       const Point T = ec.Multiply(y, S);
       const Point jT = ec.Multiply(j, T);
       byte* kj = H(ec, S, *(R_lst_p+0), ec.Add(yR, ec.Inverse(jT)), sha3);
-      byte* e = encrypt(msgs[j], kj, size_m, ec.EncodedPointSize());
+      byte* e = encrypt(msgs[i][j], kj, size_m, ec.EncodedPointSize());
       ciphers[j] = e;
     }
 

@@ -14,7 +14,7 @@ typedef ECP::Point Point;
 
 class Sender {
 private:
-  byte** msgs;
+  std::vector<std::vector<byte*>> msgs;
   ECP ec;
   Point g;
   Integer y;
@@ -25,7 +25,7 @@ private:
   int m;
 
 public:
-  Sender(byte* msages[], int size_m, ECP curve, Point base, int n, int m);
+  Sender(std::vector<std::vector<byte*>> msgs, int size_m, ECP curve, Point base, int n, int m);
   Point choose();
   byte*** retrieve(Point* R_lst_p);
 };

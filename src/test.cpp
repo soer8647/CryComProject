@@ -8,25 +8,32 @@
 #include <iostream>
 #include <chrono>
 #include <string>
+#include <vector>
 
-int stringsToByte(std::string msgs[], int n, byte* bytes[]) {
+std::vector<std::vector<byte*>> stringsToByte(std::vector<std::vector<std::string>> msgs, int m, int n) {
   int size_m_max = 0;
-  for(int i=0; i<n; i++) {
-    std::string m = msgs[i];
-    int size_m = m.length();
-    byte* mbyte = new byte[size_m];
+  std::vector<std::vector<byte*>> bytes;
+  for(int r=0; r<m; r++) {
+    std::vector<byte*> round;
+    for(int i=0; i<n; i++) {
+      std::string m = msgs[r][i];
+      int size_m = m.length();
+      byte* mbyte = new byte[size_m];
 
-    for(int j=0; j<size_m; j++) {
-      mbyte[j] = m.at(j);
+      for(int j=0; j<size_m; j++) {
+        mbyte[j] = m.at(j);
+      }
+
+      if(size_m_max < size_m) {
+        size_m_max = size_m;
+      }
+
+      round.push_back(mbyte);
     }
-
-    if(size_m_max < size_m) {
-      size_m_max = size_m;
-    }
-
-    bytes[i] = mbyte;
+    bytes.push_back(round);
   }
-  return size_m_max;
+
+  return bytes;
 }
 
 void printResult(byte* m_c, auto t1, auto t2, int size_m) {
@@ -38,8 +45,7 @@ void printResult(byte* m_c, auto t1, auto t2, int size_m) {
     std::cout << "' in time: " << duration << std::endl;
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     using namespace CryptoPP;
 
     Integer p("0xDB7C2ABF62E35E668076BEAD208B");
@@ -49,15 +55,16 @@ int main(int argc, char* argv[])
     Integer y("0xA89CE5AF8724C0A23E0E0FF77500");
 
     int c_lst[] = {0, 1, 2, 3, 4};
-    std::string msgs[3][5] = {{"besked a0", "besked a1", "besked a2", "besked a3", "besked a4"},
-                              {"besked b0", "besked b1", "besked b2", "besked b3", "besked b4"},
-                              {"besked c0", "besked c1", "besked c2", "besked c3", "besked c4"}};
+    std::vector<std::vector<std::string>> msgs = {{"besked a0", "besked a1", "besked a2", "besked a3", "besked a4"},
+                                                  {"besked b0", "besked b1", "besked b2", "besked b3", "besked b4"},
+                                                  {"besked c0", "besked c1", "besked c2", "besked c3", "besked c4"}};
 
     auto t1 = std::chrono::high_resolution_clock::now();
-    static int n = 5; //TODO
     static int m = 3; //TODO
-    byte* bytes[n] = {};
-    int size_m = stringsToByte(msgs[0], n, bytes); //TODO
+    static int n = 5; //TODO
+    int size_m = 10; //TODO
+
+    std::vector<std::vector<byte*>> bytes = stringsToByte(msgs, m, n); //TODO
 
     ECP ec = ECP(p,a,b);
     Point basePoint = Point(x,y);
