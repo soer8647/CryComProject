@@ -52,13 +52,13 @@ Point* Receiver::receive(Point S) {
   return R_lst;
 }
 
-byte* Receiver::compute(byte*** rounds_p) {
+std::vector<byte*> Receiver::compute(std::vector<std::vector<byte*>> ciphers) {
   std::vector<byte*> clear_texts;
-  for(int r=0; r<m; r++) {
-    byte** ciphertexts_p = *(rounds_p+r);
-    byte* clear_text = decrypt(*(ciphertexts_p+*(c_lst_p+r)), *(keys_p+r), size_m, ec.EncodedPointSize());
+  for(int i=0; i<m; i++) {
+    int c = *(c_lst_p+i);
+    byte* clear_text = decrypt(ciphers[i][c], *(keys_p+i), size_m, ec.EncodedPointSize());
     clear_texts.push_back(clear_text);
   }
 
-  return clear_texts[0];
+  return clear_texts;
 }

@@ -23,5 +23,5 @@ private:
 public:
   Receiver(int* c_lst_p, ECP curve, Point base, int size_m, int m);
   Point* receive(Point A);
-  byte* compute(byte*** rounds_p);
+  std::vector<byte*> compute(std::vector<std::vector<byte*>> ciphers);
 };
