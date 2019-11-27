@@ -5,6 +5,7 @@
 #include <cryptopp/ecp.h>
 #include "sender.hpp"
 #include "receiver.hpp"
+#include "utility.hpp"
 #include <iostream>
 #include <chrono>
 #include <string>
@@ -36,6 +37,59 @@ std::vector<std::vector<std::vector<byte>>> stringsToByte(std::vector<std::vecto
   }
 
   return bytes;
+}
+
+void testFastTranspose(int l , int h) {
+  // Testing fast transpose
+  std::vector<std::vector<byte>> M;
+  int kkk = 65;
+  rep(i,0,l) {
+    std::vector<byte> Mi;
+    rep(j,0,h) {
+      char c = kkk++;
+      Mi.push_back(c);
+    }
+    M.push_back(Mi);
+  }
+  rep(i,0,l) {
+    rep(j,0,h) {
+      std::cout << M[i][j];
+    }
+    std::cout << std::endl;
+  }
+
+
+  std::vector<std::vector<byte>> T;
+  T = transpose(M);
+  fast_transpose(std::addressof(M));
+
+  bool allTrue = true;
+  rep(i,0,h) {
+    rep(j,0,l) {
+      if (M[i][j] != T[i][j]) {
+        allTrue = false;
+      }
+    }
+  }
+  std::cout << allTrue << std::endl;
+  if (!allTrue) {
+    rep(i,0,h) {
+      rep(j,0,l) {
+        std::cout << M[i][j];
+      }
+      std::cout << std::endl;
+
+    }
+
+    std::cout << std::endl;
+    rep(i,0,h) {
+      rep(j,0,l) {
+        std::cout << T[i][j];
+      }
+      std::cout << std::endl;
+
+    }
+  }
 }
 
 void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int size_m, int m) {

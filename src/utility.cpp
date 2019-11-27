@@ -61,12 +61,60 @@ std::vector<byte> H_extension(int seed, std::vector<byte> input, int size, SHA3*
 std::vector<std::vector<byte>> transpose(std::vector<std::vector<byte>> M) {
   int m = M.size();
   int n = M[0].size();
-  std::vector<std::vector<byte>> T(n);
+
+  std::vector<std::vector<byte>> T;
   rep(j,0,n) {
-    T[j].reserve(m);
+    std::vector<byte> Tj;
     rep(i,0,m) {
-      T[j][i] = M[i][j];
+      Tj.push_back(M[i][j]);
     }
+    T.push_back(Tj);
   }
   return T;
+}
+
+
+int resize_matrix(std::vector<std::vector<byte>>* M_pointer) {
+  int l = (*M_pointer).size();
+  int h = (*M_pointer)[0].size();
+  int n;
+  if (l > h) {
+    n = l;
+  } else {
+    n = h;
+  }
+  if (ceil(log2(n)) != floor(log2(n))) {
+    n = pow(2,ceil(log2(n)));
+  }
+  (*M_pointer).resize(n);
+  if (h < n) {
+    rep(i,0,n) {
+      (*M_pointer)[i].resize(n);
+    }
+  }
+  return n;
+}
+
+void fast_transpose_aux(std::vector<std::vector<byte>>* M_pointer, int start_x, int start_y, int n) {
+  if (n == 1) {
+    return;
+  }
+  int half = n/2;
+  rep(i,start_x,start_x + half) {
+    rep(j,start_y,start_y + half) {
+      auto temp = (*M_pointer)[i][+ j + half];
+      (*M_pointer)[i][j + half] = (*M_pointer)[i + half][j];
+      (*M_pointer)[i + half][j] = temp;
+    }
+  }
+  fast_transpose_aux(M_pointer,start_x,start_y,half);
+  fast_transpose_aux(M_pointer,start_x,start_y + half,half);
+  fast_transpose_aux(M_pointer,start_x + half,start_y + half,half);
+  fast_transpose_aux(M_pointer,start_x + half,start_y,half);
+  return;
+}
+
+void fast_transpose(std::vector<std::vector<byte>>* M_pointer) {
+  int n = resize_matrix(M_pointer);
+  fast_transpose_aux(M_pointer,0,0,n);
 }

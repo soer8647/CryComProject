@@ -21,4 +21,6 @@ std::vector<byte> H_extension(int seed, std::vector<byte> input, int size, SHA3*
 
 std::vector<std::vector<byte>> transpose(std::vector<std::vector<byte>> M);
 
+void fast_transpose(std::vector<std::vector<byte>>* M);
+
 #endif
