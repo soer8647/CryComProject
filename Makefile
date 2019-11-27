@@ -13,4 +13,4 @@ clean:
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(@D)
-	$(CXX) -c -g -o $@ $<
+	$(CXX) -std=$(VERSION) -c -g -o $@ $<
