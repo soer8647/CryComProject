@@ -14,7 +14,7 @@ typedef ECP::Point Point;
 #define INCLUDED_receiver
 class Receiver {
 private:
-  int* c_lst_p;
+  std::vector<int> c_lst_p;
   ECP ec;
   Point g;
   std::vector<byte*> key_lst;
@@ -23,9 +23,9 @@ private:
   int m;
 
 public:
-  Receiver(int* c_lst_p, ECP curve, Point base, int size_m, int m);
+  Receiver(std::vector<int> c_lst_p, ECP curve, Point base, int size_m, int m);
   std::vector<Point> receive(Point A);
-  std::vector<byte*> compute(std::vector<std::vector<byte*>> ciphers);
+  std::vector<std::vector<byte>> compute(std::vector<std::vector<byte*>> ciphers);
 };
 
 #endif

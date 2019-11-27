@@ -1,7 +1,7 @@
 #include "sender.hpp"
 #include "utility.hpp"
 
-byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
+byte* encrypt(std::vector<byte> m, byte* key, int size_m, int size_k) {
   byte* cip = new byte[size_k];
   for(int i=0; i<size_m; i++) {
     cip[i] = m[i]^key[i];
@@ -13,12 +13,12 @@ byte* encrypt(byte* m, byte* key, int size_m, int size_k) {
   return cip;
 }
 
-Sender::Sender(std::vector<std::vector<byte*>> msages, int size_msg, ECP curve, Point base, int nr, int m_rounds) {
+Sender::Sender(std::vector<std::vector<std::vector<byte>>> msages, int size_msg, ECP curve, Point base, int nr, int m_rounds) {
   size_m = size_msg;
   g = base;
   ec = curve;
   msgs = msages;
-  sha3 = new SHA3_256();
+  sha3 = new SHA3_512();
   n = nr;
   m = m_rounds;
 }

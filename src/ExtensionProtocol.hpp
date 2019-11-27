@@ -4,4 +4,4 @@
 #include "receiver.hpp"
 #include "utility.hpp"
 
-std::vector<std::vector<byte>> f(ExtensionSender* S, ExtensionReceiver* R);
+std::vector<std::vector<byte>> OT_extension(ExtensionSender* S, ExtensionReceiver* R, int msg_size, ECP ec, Point basePoint, int n, int m);

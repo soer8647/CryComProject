@@ -13,10 +13,12 @@ byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3);
 
 std::vector<byte> byte_xor(std::vector<byte> a, std::vector<byte> b);
 
-std::vector<byte> bit_xor(std::vector<byte> a, std::vector<bool> b);
+std::vector<byte> bit_xor(std::vector<byte> a, std::vector<int> b);
 
 std::vector<byte> G(std::vector<byte> input, int size);
 
 std::vector<byte> H_extension(int seed, std::vector<byte> input, int size, SHA3* sha3);
+
+std::vector<std::vector<byte>> transpose(std::vector<std::vector<byte>> M);
 
 #endif

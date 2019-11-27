@@ -1,25 +1,25 @@
 #include "receiver.hpp"
 #include "utility.hpp"
 
-byte* decrypt(byte* cip, byte* key, int size_m, int size_k) {
-  byte* ct = new byte[size_m];
+std::vector<byte> decrypt(byte* cip, byte* key, int size_m, int size_k) {
+  std::vector<byte> ct;
   for(int i=0; i<size_m; i++) {
-    ct[i] = cip[i]^key[i];
+    ct.push_back(cip[i]^key[i]);
   }
   for(int i=size_m; i<size_k; i++) {
     if(cip[i] != key[i]) {
       std::cout << "Error! invalid decryption " << cip[i] << "!=" << key[i] << std::endl;
-      return NULL;
+      return std::vector<byte> ();
     }
   }
   return ct;
 }
 
-Receiver::Receiver(int* choices, ECP curve, Point base, int size_msg, int m_rounds) {
+Receiver::Receiver(std::vector<int> choices, ECP curve, Point base, int size_msg, int m_rounds) {
   c_lst_p = choices;
   ec = curve;
   g = base;
-  sha3 = new SHA3_256();
+  sha3 = new SHA3_512();
   size_m = size_msg;
   m = m_rounds;
 }
@@ -38,7 +38,7 @@ std::vector<Point> Receiver::receive(Point S) {
     int length = 4096;
     AutoSeededRandomPool prng;
     x.Randomize(prng, length);
-    Point R = ec.Add(ec.Multiply(*(c_lst_p+i),S), ec.Multiply(x,g));
+    Point R = ec.Add(ec.Multiply(c_lst_p[i],S), ec.Multiply(x,g));
     byte* key = H(ec, S, R, ec.Multiply(x,S), sha3);
 
     xs.push_back(x);
@@ -49,11 +49,10 @@ std::vector<Point> Receiver::receive(Point S) {
   return R_lst;
 }
 
-std::vector<byte*> Receiver::compute(std::vector<std::vector<byte*>> ciphers) {
-  std::vector<byte*> clear_texts;
+std::vector<std::vector<byte>> Receiver::compute(std::vector<std::vector<byte*>> ciphers) {
+  std::vector<std::vector<byte>> clear_texts;
   for(int i=0; i<m; i++) {
-    int c = *(c_lst_p+i);
-    byte* clear_text = decrypt(ciphers[i][c], key_lst[i], size_m, ec.EncodedPointSize());
+    std::vector<byte> clear_text = decrypt(ciphers[i][c_lst_p[i]], key_lst[i], size_m, ec.EncodedPointSize());
     clear_texts.push_back(clear_text);
   }
 

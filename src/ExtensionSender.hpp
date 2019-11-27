@@ -19,14 +19,14 @@ class ExtensionSender {
 private:
   int n;
   int k;
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> x;
+  std::vector<std::vector<std::vector<byte>>> x;
   int size_m;
-  std::vector<bool> s;
+  std::vector<int> s;
   SHA3* sha3;
 public:
-  ExtensionSender(std::vector<std::pair<std::vector<byte>,std::vector<byte>>> messages, int m, int k_, int size_msg);
-  std::vector<bool> basePhase();
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> extensionPhase2(std::vector<std::vector<byte>> u, std::vector<std::vector<byte>> chosenSeeds);
+  ExtensionSender(std::vector<std::vector<std::vector<byte>>> messages, int m, int k_, int size_msg);
+  std::vector<int> basePhase();
+  std::vector<std::vector<std::vector<byte>>> extensionPhase2(std::vector<std::vector<byte>> u, std::vector<std::vector<byte>> chosenSeeds);
 };
 
 #endif

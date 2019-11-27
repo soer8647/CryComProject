@@ -22,15 +22,15 @@ private:
   int size_m;
   bool* s;
   SHA3* sha3;
-  std::vector<bool> r;
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> keys;
+  std::vector<int> r;
+  std::vector<std::vector<std::vector<byte>>> keys;
   std::vector<std::vector<byte>> t;
 
 public:
-  ExtensionReceiver(std::vector<bool> choices, int m, int k_, int size_msg);
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> basePhase();
+  ExtensionReceiver(std::vector<int> choices, int m, int k_, int size_msg);
+  std::vector<std::vector<std::vector<byte>>> basePhase();
   std::vector<std::vector<byte>> extensionPhase1();
-  std::vector<std::vector<byte>> extensionPhase3(std::vector<std::pair<std::vector<byte>,std::vector<byte>>> y);
+  std::vector<std::vector<byte>> extensionPhase3(std::vector<std::vector<std::vector<byte>>> y);
 };
 
 #endif

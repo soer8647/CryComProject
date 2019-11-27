@@ -2,7 +2,7 @@
 #include "utility.hpp"
 #include <bits/stdc++.h>
 
-ExtensionSender::ExtensionSender(std::vector<std::pair<std::vector<byte>,std::vector<byte>>> messages, int m, int k_, int size_msg)
+ExtensionSender::ExtensionSender(std::vector<std::vector<std::vector<byte>>> messages, int m, int k_, int size_msg)
 {
   x = messages;
   n = m;
@@ -11,18 +11,18 @@ ExtensionSender::ExtensionSender(std::vector<std::pair<std::vector<byte>,std::ve
   sha3 = new SHA3_256();
 }
 
-std::vector<bool> ExtensionSender::basePhase() {
+std::vector<int> ExtensionSender::basePhase() {
   Integer b;
   int length = 1;
   AutoSeededRandomPool prng;
   rep(i,0,k) {
     b.Randomize(prng, length);
-    s.push_back(b.IsZero());
+    s.push_back(b.ConvertToLong());
   }
   return s;
 }
 
-std::vector<std::pair<std::vector<byte>,std::vector<byte>>> ExtensionSender::extensionPhase2(std::vector<std::vector<byte>> u, std::vector<std::vector<byte>> key) {
+std::vector<std::vector<std::vector<byte>>> ExtensionSender::extensionPhase2(std::vector<std::vector<byte>> u, std::vector<std::vector<byte>> key) {
   std::vector<std::vector<byte>> q;
   rep(i,0,k) {
     std::vector<byte> qi;
@@ -34,21 +34,16 @@ std::vector<std::pair<std::vector<byte>,std::vector<byte>>> ExtensionSender::ext
     q.push_back(qi);
   }
 
-  std::vector<std::vector<byte>> q_(n);
-  rep(j,0,n) {
-    q_[j].reserve(k);
-    rep(i,0,k) {
-      q_[j][i] = q[i][j];
-    }
-  }
+  std::vector<std::vector<byte>> q_;
+  q_ = transpose(q);
 
-  std::vector<std::pair<std::vector<byte>,std::vector<byte>>> ys;
+  std::vector<std::vector<std::vector<byte>>> ys;
   rep(i,0,n) {
     std::vector<byte> H_res = H_extension(i,q_[i], size_m, sha3);
-    std::vector<byte> y0 = byte_xor(x[i].first , H_res);
+    std::vector<byte> y0 = byte_xor(x[i][0] , H_res);
     std::vector<byte> tmp = bit_xor(q_[i], s);
-    std::vector<byte> y1 = byte_xor(x[i].second , H_extension(i,tmp, size_m, sha3));
-    ys.push_back(std::pair<std::vector<byte>,std::vector<byte>>(y0,y1));
+    std::vector<byte> y1 = byte_xor(x[i][1] , H_extension(i,tmp, size_m, sha3));
+    ys.push_back(std::vector<std::vector<byte>>{y0,y1});
   }
   return ys;
 }
