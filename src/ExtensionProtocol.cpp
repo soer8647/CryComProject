@@ -13,15 +13,10 @@ std::vector<std::vector<byte>> OT_Protocol(std::vector<int> s , std::vector<std:
 
   Point S = sender->choose();
   std::vector<Point> R_lst = receiver->receive(S);
-  std::vector<std::vector<byte*>> ciphers = sender->retrieve(R_lst);
-  std::vector<byte*> clear_texts = receiver->compute(ciphers);
+  std::vector<std::vector<std::vector<byte>>> ciphers = sender->retrieve(R_lst);
+  std::vector<std::vector<byte>> clear_texts = receiver->compute(ciphers);
 
-  std::vector<std::vector<byte>> output;
-  rep(i,0,clear_texts.size()) {
-    std::vector<byte> mi (clear_texts[i], msg_size + clear_texts[i]);
-    output.push_back(mi);
-  }
-  return output;
+  return clear_texts;
 }
 
 std::vector<std::vector<byte>> OT_extension(ExtensionSender* S, ExtensionReceiver* R, int msg_size, ECP ec, Point basePoint, int n, int m) {

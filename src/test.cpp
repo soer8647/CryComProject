@@ -50,8 +50,7 @@ void testFastTranspose(int l , int h) {
       Mi.push_back(c);
     }
     M.push_back(Mi);
-  }
-  rep(i,0,l) {
+  }  rep(i,0,l) {
     rep(j,0,h) {
       std::cout << M[i][j];
     }
@@ -166,7 +165,7 @@ int main(int argc, char* argv[]) {
 
     Point S = sender->choose();
     std::vector<Point> R_lst = receiver->receive(S);
-    std::vector<std::vector<byte*>> ciphers = sender->retrieve(R_lst);
+    std::vector<std::vector<std::vector<byte>>> ciphers = sender->retrieve(R_lst);
     std::vector<std::vector<byte>> clear_texts = receiver->compute(ciphers);
 
     auto t2 = std::chrono::high_resolution_clock::now();

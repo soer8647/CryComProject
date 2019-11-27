@@ -1,13 +1,13 @@
 #include "sender.hpp"
 #include "utility.hpp"
 
-byte* encrypt(std::vector<byte> m, byte* key, int size_m, int size_k) {
-  byte* cip = new byte[size_k];
+std::vector<byte> encrypt(std::vector<byte> m, byte* key, int size_m, int size_k) {
+  std::vector<byte> cip;
   for(int i=0; i<size_m; i++) {
-    cip[i] = m[i]^key[i];
+    cip.push_back(m[i]^key[i]);
   }
   for(int i=size_m; i<size_k; i++) {
-    cip[i] = key[i];
+    cip.push_back(key[i]);
   }
 
   return cip;
@@ -32,18 +32,18 @@ Point Sender::choose() {
   return S;
 }
 
-std::vector<std::vector<byte*>> Sender::retrieve(std::vector<Point> R_lst) {
-  std::vector<std::vector<byte*>> rounds;
+std::vector<std::vector<std::vector<byte>>> Sender::retrieve(std::vector<Point> R_lst) {
+  std::vector<std::vector<std::vector<byte>>> rounds;
 
   for(int i=0; i<m; i++) {
-    std::vector<byte*> ciphers2;
+    std::vector<std::vector<byte>> ciphers2;
 
     for(int j=0; j<n; j++) {
       const Point yR = ec.Multiply(y, R_lst[i]);
       const Point T = ec.Multiply(y, S);
       const Point jT = ec.Multiply(j, T);
       byte* kj = H(ec, S, R_lst[i], ec.Add(yR, ec.Inverse(jT)), sha3);
-      byte* e = encrypt(msgs[i][j], kj, size_m, ec.EncodedPointSize());
+      std::vector<byte> e = encrypt(msgs[i][j], kj, size_m, ec.EncodedPointSize());
       ciphers2.push_back(e);
     }
     rounds.push_back(ciphers2);

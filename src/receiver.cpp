@@ -1,7 +1,7 @@
 #include "receiver.hpp"
 #include "utility.hpp"
 
-std::vector<byte> decrypt(byte* cip, byte* key, int size_m, int size_k) {
+std::vector<byte> decrypt(std::vector<byte> cip, byte* key, int size_m, int size_k) {
   std::vector<byte> ct;
   for(int i=0; i<size_m; i++) {
     ct.push_back(cip[i]^key[i]);
@@ -49,7 +49,7 @@ std::vector<Point> Receiver::receive(Point S) {
   return R_lst;
 }
 
-std::vector<std::vector<byte>> Receiver::compute(std::vector<std::vector<byte*>> ciphers) {
+std::vector<std::vector<byte>> Receiver::compute(std::vector<std::vector<std::vector<byte>>> ciphers) {
   std::vector<std::vector<byte>> clear_texts;
   for(int i=0; i<m; i++) {
     std::vector<byte> clear_text = decrypt(ciphers[i][c_lst_p[i]], key_lst[i], size_m, ec.EncodedPointSize());
