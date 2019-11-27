@@ -1,6 +1,5 @@
 #include "ExtensionSender.hpp"
 #include "utility.hpp"
-#include <bits/stdc++.h>
 
 ExtensionSender::ExtensionSender(std::vector<std::vector<std::vector<byte>>> messages, int m, int k_, int size_msg)
 {
