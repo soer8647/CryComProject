@@ -50,7 +50,8 @@ void testFastTranspose(int l , int h) {
       Mi.push_back(c);
     }
     M.push_back(Mi);
-  }  rep(i,0,l) {
+  }
+  rep(i,0,l) {
     rep(j,0,h) {
       std::cout << M[i][j];
     }
@@ -59,13 +60,15 @@ void testFastTranspose(int l , int h) {
 
 
   std::vector<std::vector<byte>> T;
+  std::vector<std::vector<byte>> FT;
+
   T = transpose(M);
-  fast_transpose(std::addressof(M));
+  FT = fast_transpose(M);
 
   bool allTrue = true;
   rep(i,0,h) {
     rep(j,0,l) {
-      if (M[i][j] != T[i][j]) {
+      if (FT[i][j] != T[i][j]) {
         allTrue = false;
       }
     }
@@ -74,7 +77,7 @@ void testFastTranspose(int l , int h) {
   if (!allTrue) {
     rep(i,0,h) {
       rep(j,0,l) {
-        std::cout << M[i][j];
+        std::cout << FT[i][j];
       }
       std::cout << std::endl;
 
@@ -105,7 +108,7 @@ void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int 
 
 int main(int argc, char* argv[]) {
     using namespace CryptoPP;
-
+    testFastTranspose(4,15);
     /**
     Integer p("0xDB7C2ABF62E35E668076BEAD208B");
     Integer a("0xDB7C2ABF62E35E668076BEAD2088");
