@@ -95,8 +95,9 @@ void testFastTranspose(int l , int h) {
 }
 
 void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int size_m, int m) {
-    std::cout << "output:" << std::endl << "'";
+    std::cout << "output:" << std::endl;
     for(int j=0; j<m; j++) {
+      std::cout << "'";
       for(int i=0; i<size_m; i++) {
         std::cout << clear_texts[j][i];
       }
@@ -136,9 +137,8 @@ int main(int argc, char* argv[]) {
       std::cout << "bad" << std::endl;
     }
 
-    int m = 100;
+    int m = 9;
     int n = 2;
-    int size_message = 4;
 
     // Create Choices
     std::vector<int> c_lst;
@@ -156,6 +156,7 @@ int main(int argc, char* argv[]) {
       msgs.push_back(msgs_i);
     }
 
+    int size_message = msgs[0][0].size();
 
     int k = 128;
     std::vector<std::vector<std::vector<byte>>> bytes = stringsToByte(msgs, m, n);
