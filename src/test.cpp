@@ -95,20 +95,19 @@ void testFastTranspose(int l , int h) {
 }
 
 void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int size_m, int m) {
-
-    std::cout << "output:" << std::endl;
-    for(int j=0; j<0; j++) {
+    std::cout << "output:" << std::endl << "'";
+    for(int j=0; j<m; j++) {
       for(int i=0; i<size_m; i++) {
         std::cout << clear_texts[j][i];
       }
       std::cout << "'" << std::endl;
     }
-    std::cout << "' in time: " << duration << std::endl;
+    std::cout << " in time: " << duration << std::endl;
 }
 
 int main(int argc, char* argv[]) {
     using namespace CryptoPP;
-    testFastTranspose(4,15);
+    //testFastTranspose(4,15);
     /**
     Integer p("0xDB7C2ABF62E35E668076BEAD208B");
     Integer a("0xDB7C2ABF62E35E668076BEAD2088");
@@ -173,7 +172,7 @@ int main(int argc, char* argv[]) {
 
     auto t2 = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
-    
+
     printResult(clear_texts, duration, size_message, m);
 
     // OT extension
@@ -188,7 +187,6 @@ int main(int argc, char* argv[]) {
     duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
 
     printResult(chosen_msg, duration, size_message, m);
-
 
     return 0;
 }
