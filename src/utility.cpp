@@ -143,3 +143,4 @@ std::vector<std::vector<byte>> fast_transpose(std::vector<std::vector<byte>> M) 
   }
   result.resize(m);
   return result;
+}

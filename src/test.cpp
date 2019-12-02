@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
     }
 
 
-    int k = 10;
+    int k = 128;
     std::vector<std::vector<std::vector<byte>>> bytes = stringsToByte(msgs, m, n);
 
     auto t1 = std::chrono::high_resolution_clock::now();
