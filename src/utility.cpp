@@ -1,5 +1,7 @@
 #include "utility.hpp"
 #include "cryptopp/randpool.h"
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/modes.h>
 
 byte* H(ECP curve, Point seed1, Point seed2, Point p, SHA3* sha3) {
   size_t size = curve.EncodedPointSize();
@@ -40,12 +42,12 @@ std::vector<byte> bit_xor(std::vector<byte> a, std::vector<int> b) {
   return output;
 }
 
-std::vector<byte> G(std::vector<byte> input, int size){
-  RandomPool rng;
-  rng.IncorporateEntropy(&input[0], size);
-  byte* output = new byte[size];
-  rng.GenerateBlock(output,size);
-  std::vector<byte> output_vector(output, size + output);
+std::vector<byte> G(std::vector<byte> input, int m){
+  OFB_Mode<AES>::Encryption prng;
+  prng.SetKeyWithIV(&input[0], 16, &input[16], 16);
+  byte* output = new byte[m];
+  prng.GenerateBlock(output, m);
+  std::vector<byte> output_vector(output, m + output);
   return output_vector;
 }
 
@@ -114,31 +116,7 @@ void fast_transpose_aux(std::vector<std::vector<byte>>* M_pointer, int start_x, 
   return;
 }
 
-std::vector<std::vector<byte>> fast_transpose(std::vector<std::vector<byte>> M) {
-  int k = M.size();
-  int m = M[0].size();
-  int i = 0;
-
-  std::vector<std::vector<byte>> result;
-  int tmp = m;
-  while (tmp > 0) {
-    std::vector<std::vector<byte>> subM;
-    rep(q,0,k) {
-      std::vector<byte>::const_iterator first = M[q].begin() + (i * k);
-      std::vector<byte>::const_iterator last = M[q].begin() + ((i + 1) * k);
-      std::vector<byte> subvector(first, last);
-      subvector.resize(k);
-      subM.push_back(subvector);
-    }
-
-    fast_transpose_aux(std::addressof(subM),0,0,k);
-
-    rep(j,0,k) {
-      result.push_back(subM[j]);
-    }
-    i++;
-    tmp -= k;
-  }
-  result.resize(m);
-  return result;
+void fast_transpose(std::vector<std::vector<byte>>* M_pointer) {
+  int n = resize_matrix(M_pointer);
+  fast_transpose_aux(M_pointer,0,0,n);
 }
