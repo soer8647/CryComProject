@@ -116,7 +116,30 @@ void fast_transpose_aux(std::vector<std::vector<byte>>* M_pointer, int start_x, 
   return;
 }
 
-void fast_transpose(std::vector<std::vector<byte>>* M_pointer) {
-  int n = resize_matrix(M_pointer);
-  fast_transpose_aux(M_pointer,0,0,n);
-}
+std::vector<std::vector<byte>> fast_transpose(std::vector<std::vector<byte>> M) {
+  int k = M.size();
+  int m = M[0].size();
+  int i = 0;
+
+  std::vector<std::vector<byte>> result;
+  int tmp = m;
+  while (tmp > 0) {
+    std::vector<std::vector<byte>> subM;
+    rep(q,0,k) {
+      std::vector<byte>::const_iterator first = M[q].begin() + (i * k);
+      std::vector<byte>::const_iterator last = M[q].begin() + ((i + 1) * k);
+      std::vector<byte> subvector(first, last);
+      subvector.resize(k);
+      subM.push_back(subvector);
+    }
+
+    fast_transpose_aux(std::addressof(subM),0,0,k);
+
+    rep(j,0,k) {
+      result.push_back(subM[j]);
+    }
+    i++;
+    tmp -= k;
+  }
+  result.resize(m);
+  return result;
