@@ -66,9 +66,9 @@ clock_t timefastTranspose(std::vector<std::vector<byte>> M, int iterations) {
 }
 
 void timeTestTransposes() {
-  std::string sizeString = "size: ";
-  std::string normalString = "normal: ";
-  std::string fastString   = "fast: ";
+  std::string sizeString = "size, ";
+  std::string normalString = "normal, ";
+  std::string fastString   = "fast, ";
   int iterations = 10;
 
   rep(i,5,15) {
@@ -257,14 +257,15 @@ clock_t timeExtension(std::vector<int> choices, std::vector<std::vector<std::vec
 }
 
 void timeTestOT(int iterations, int min, int max) {
-  std::string sizeString = "size: ";
-  std::string normalString = "normal: ";
-  std::string extension128String   = "Ex128: ";
-  std::string extension256String   = "Ex256: ";
+  std::string sizeString = "size, ";
+  std::string normalString = "normal, ";
+  std::string extension128String   = "Ex128, ";
+  std::string extension256String   = "Ex256, ";
 
   rep(i,min,max) {
     int l = pow(2,i);
     sizeString = sizeString + std::to_string(l) + ",";
+    std::cout << "doing size: " << l << std::endl;
 
     auto choices = createChoices(l);
     auto messages = createMessages(l,2);
