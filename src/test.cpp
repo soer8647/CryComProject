@@ -66,12 +66,14 @@ clock_t timefastTranspose(std::vector<std::vector<byte>> M, int iterations) {
 }
 
 void timeTestTransposes() {
+  std::string sizeString = "size: ";
   std::string normalString = "normal: ";
   std::string fastString   = "fast: ";
   int iterations = 10;
 
   rep(i,5,15) {
       int l = pow(2,i);
+      sizeString = sizeString + std::to_string(l) + ",";
       // create matrix
       std::vector<std::vector<byte>> M;
       int msg = 65;
@@ -92,6 +94,7 @@ void timeTestTransposes() {
   }
   std::ofstream outFile;
   outFile.open("transposeTest.csv");
+  outFile << sizeString << std::endl;
   outFile << normalString << std::endl;
   outFile << fastString << std::endl;
 }
@@ -254,12 +257,14 @@ clock_t timeExtension(std::vector<int> choices, std::vector<std::vector<std::vec
 }
 
 void timeTestOT(int iterations, int min, int max) {
+  std::string sizeString = "size: ";
   std::string normalString = "normal: ";
   std::string extension128String   = "Ex128: ";
   std::string extension256String   = "Ex256: ";
 
   rep(i,min,max) {
     int l = pow(2,i);
+    sizeString = sizeString + std::to_string(l) + ",";
 
     auto choices = createChoices(l);
     auto messages = createMessages(l,2);
@@ -276,6 +281,7 @@ void timeTestOT(int iterations, int min, int max) {
   }
   std::ofstream outFile;
   outFile.open("data/OTTest.csv");
+  outFile << sizeString << std::endl;
   outFile << normalString << std::endl;
   outFile << extension128String << std::endl;
   outFile << extension256String << std::endl;
@@ -295,6 +301,7 @@ void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int 
 
 void runAndPrintOT() {
   int m = 9;
+
   int n = 2;
   int size_message = 3; // should match "createMessages" function
   int k = 128;
