@@ -22,22 +22,28 @@ clock_t timefastTranspose(std::vector<std::vector<byte>> M, int iterations) {
   return allTime / iterations;
 }
 
-void timeTestTransposes(int iterations, int min, int max) {
-  std::string sizeString = "size, ";
-  std::string normalString = "normal, ";
-  std::string fastString   = "fast, ";
+void timeTestTransposes(int iterations, int min, int max, bool square, int h) {
+  std::ofstream outFile;
+  if (square) {
+    outFile.open("data/transposeSquareTest.csv");
+  } else {
+    outFile.open("data/transpose" + std::to_string(h) + "Test.csv");
+  }
+  outFile << "size,normal,Eklundh" << std::endl;
 
   rep(i,min,max) {
       int l = pow(2,i);
-      sizeString = sizeString + std::to_string(l) + ",";
+      if (square) {
+        h = l;
+      }
       std::cout << "doing size: " << l << std::endl;
       // create matrix
       std::vector<std::vector<byte>> M;
       int msg = 65;
-      rep(i,0,l) {
+      rep(i,0,h) {
         std::vector<byte> Mi;
         rep(j,0,l) {
-          char c = msg++;
+          char c = msg + (l % 24);
           Mi.push_back(c);
         }
         M.push_back(Mi);
@@ -46,14 +52,8 @@ void timeTestTransposes(int iterations, int min, int max) {
       clock_t normal_time = timeTranspose(M,iterations);
       clock_t fast_time = timeTranspose(M,iterations);
 
-      normalString = normalString + std::to_string(normal_time) + ",";
-      fastString = fastString + std::to_string(fast_time) + ",";
+      outFile << i << "," << (normal_time / (float) l)  << "," << (fast_time / (float) l) << std::endl;
   }
-  std::ofstream outFile;
-  outFile.open("transposeTest.csv");
-  outFile << sizeString << std::endl;
-  outFile << normalString << std::endl;
-  outFile << fastString << std::endl;
 }
 
 clock_t timeOT(std::vector<int> choices, std::vector<std::vector<std::vector<byte>>> messages, ECP ec, Point basePoint, int rounds, int n, int iterations) {

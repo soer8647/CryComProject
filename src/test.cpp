@@ -95,8 +95,10 @@ void runAndPrintOT() {
 
 int main(int argc, char* argv[]) {
   //testFastTranspose(4,15);
-  //timeTestTransposes(3,5,20);
+  timeTestTransposes(3,5,17);
+  //timeTestTransposes(3,5,16,false,128);
+  //timeTestTransposes(3,5,16,false,256);
   //timeTestOT(2,1,4);
-  runAndPrintOT();
+  //runAndPrintOT();
   return 0;
 }

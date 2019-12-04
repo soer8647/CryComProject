@@ -15,7 +15,7 @@
 #ifndef INCLUDED_timeTest
 #define INCLUDED_timeTest
 
-void timeTestTransposes(int iterations, int min, int max);
+void timeTestTransposes(int iterations, int min, int max, bool square = true, int h = 2);
 void timeTestOT(int iterations, int min, int max);
 
 #endif
