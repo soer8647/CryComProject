@@ -34,7 +34,7 @@ std::vector<std::vector<std::vector<byte>>> ExtensionSender::extensionPhase2(std
   }
 
   std::vector<std::vector<byte>> q_;
-  q_ = transpose(q);
+  q_ = fast_transpose(q);
 
   std::vector<std::vector<std::vector<byte>>> ys;
   rep(i,0,n) {

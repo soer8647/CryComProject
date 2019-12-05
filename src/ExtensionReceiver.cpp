@@ -46,7 +46,7 @@ std::vector<std::vector<byte>> ExtensionReceiver::extensionPhase1() {
 
 std::vector<std::vector<byte>> ExtensionReceiver::extensionPhase3(std::vector<std::vector<std::vector<byte>>> y) {
   std::vector<std::vector<byte>> t_;
-  t_ = transpose(t);
+  t_ = fast_transpose(t);
 
   std::vector<std::vector<byte>> x;
   rep(i,0,n) {
