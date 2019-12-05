@@ -52,7 +52,7 @@ void timeTestTransposes(int iterations, int min, int max, bool square, int h) {
       clock_t normal_time = timeTranspose(M,iterations);
       clock_t fast_time = timeTranspose(M,iterations);
 
-      outFile << i << "," << (normal_time / (float) l)  << "," << (fast_time / (float) l) << std::endl;
+      outFile << i << "," << (( ((float) normal_time) / CLOCKS_PER_SEC) /  l)  << "," << ((((float) fast_time) / CLOCKS_PER_SEC) / l) << std::endl;
   }
 }
 
@@ -79,14 +79,12 @@ clock_t timeExtension(std::vector<int> choices, std::vector<std::vector<std::vec
 }
 
 void timeTestOT(int iterations, int min, int max) {
-  std::string sizeString = "size, ";
-  std::string normalString = "normal, ";
-  std::string extension128String   = "Ex128, ";
-  std::string extension256String   = "Ex256, ";
+  std::ofstream outFile;
+  outFile.open("data/OTTest.csv");
+  outFile << "size,normal,Ex128,Ex256" << std::endl;
 
   rep(i,min,max) {
     int l = pow(2,i);
-    sizeString = sizeString + std::to_string(l) + ",";
     std::cout << "doing size: " << l << std::endl;
 
     auto choices = createChoices(l);
@@ -98,14 +96,6 @@ void timeTestOT(int iterations, int min, int max) {
     clock_t e1_time = timeExtension(choices, messages, ec, basePoint, l, 128, iterations);
     clock_t e2_time = timeExtension(choices, messages, ec, basePoint, l, 256, iterations);
 
-    normalString = normalString + std::to_string(n_time) + ",";
-    extension128String = extension128String + std::to_string(e1_time) + ",";
-    extension256String = extension256String + std::to_string(e2_time) + ",";
+    outFile << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << (e1_time / CLOCKS_PER_SEC) / (float l) << "," << ((((float) fast_time) / CLOCKS_PER_SEC) / l) << "," << std::endl;
   }
-  std::ofstream outFile;
-  outFile.open("data/OTTest.csv");
-  outFile << sizeString << std::endl;
-  outFile << normalString << std::endl;
-  outFile << extension128String << std::endl;
-  outFile << extension256String << std::endl;
 }
