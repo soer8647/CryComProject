@@ -96,6 +96,6 @@ void timeTestOT(int iterations, int min, int max) {
     clock_t e1_time = timeExtension(choices, messages, ec, basePoint, l, 128, iterations);
     clock_t e2_time = timeExtension(choices, messages, ec, basePoint, l, 256, iterations);
 
-    outFile << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << (e1_time / CLOCKS_PER_SEC) / (float l) << "," << ((((float) fast_time) / CLOCKS_PER_SEC) / l) << "," << std::endl;
+    outFile << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << ((( (float) e1_time) / CLOCKS_PER_SEC) / l) << "," << ((( (float) e2_time) / CLOCKS_PER_SEC) / l) << "," << std::endl;
   }
 }
