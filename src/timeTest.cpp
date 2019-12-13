@@ -78,6 +78,50 @@ clock_t timeExtension(std::vector<int> choices, std::vector<std::vector<std::vec
   return allTime / iterations;
 }
 
+
+void timeOTk(int iterations, int min, int max) {
+  std::ofstream outFile;
+  outFile.open("data/kTest.csv");
+  outFile << "size,mes100, mes200" << std::endl;
+
+  auto ec = getEC();
+  auto basePoint = getBasePoint();
+  auto c100 = createChoices(100);
+  auto mes100 = createMessages(100,2);
+  auto c1000 = createChoices(100);
+  auto mes1000 = createMessages(100,2);
+  rep(i,min,max) {
+    int l = pow(2,i);
+    std::cout << "doing size: " << l << std::endl;
+
+    clock_t e1_time = timeExtension(c100, mes100, ec, basePoint, 100, l, iterations);
+    clock_t e2_time = timeExtension(c1000, mes1000, ec, basePoint, 1000, l, iterations);
+
+    outFile << l << "," << ((((float) e1_time) / CLOCKS_PER_SEC)) << ","
+            << ((((float) e2_time) / CLOCKS_PER_SEC)) << std::endl;
+  }
+}
+
+void timeTestOTFineGrained(int iterations, int min, int max, int k) {
+  std::ofstream outFile;
+  outFile.open("data/FineOTTest.csv");
+  outFile << "size,normal,Ext" << k << std::endl;
+
+  rep(l,min,max) {
+    std::cout << "doing size: " << l << std::endl;
+
+    auto choices = createChoices(l);
+    auto messages = createMessages(l,2);
+    auto ec = getEC();
+    auto basePoint = getBasePoint();
+
+    clock_t n_time = timeOT(choices, messages, ec, basePoint, l, 2, iterations);
+    clock_t e1_time = timeExtension(choices, messages, ec, basePoint, l, k, iterations);
+
+    outFile << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << ((( (float) e1_time) / CLOCKS_PER_SEC) / l)  << std::endl;
+  }
+}
+
 void timeTestOT(int iterations, int min, int max) {
   std::ofstream outFile;
   outFile.open("data/OTTest.csv");

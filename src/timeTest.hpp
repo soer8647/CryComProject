@@ -17,5 +17,7 @@
 
 void timeTestTransposes(int iterations, int min, int max, bool square = true, int h = 2);
 void timeTestOT(int iterations, int min, int max);
+void timeOTk(int iterations, int min, int max);
+void timeTestOTFineGrained(int iterations, int min, int ma, int k);
 
 #endif
