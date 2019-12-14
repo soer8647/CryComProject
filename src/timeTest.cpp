@@ -88,8 +88,8 @@ void timeOTk(int iterations, int min, int max) {
   auto basePoint = getBasePoint();
   auto c100 = createChoices(100);
   auto mes100 = createMessages(100,2);
-  auto c1000 = createChoices(100);
-  auto mes1000 = createMessages(100,2);
+  auto c1000 = createChoices(1000);
+  auto mes1000 = createMessages(1000,2);
   rep(i,min,max) {
     int l = pow(2,i);
     std::cout << "doing size: " << l << std::endl;
@@ -118,7 +118,7 @@ void timeTestOTFineGrained(int iterations, int min, int max, int k) {
     clock_t n_time = timeOT(choices, messages, ec, basePoint, l, 2, iterations);
     clock_t e1_time = timeExtension(choices, messages, ec, basePoint, l, k, iterations);
 
-    outFile << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << ((( (float) e1_time) / CLOCKS_PER_SEC) / l)  << std::endl;
+    outFile << l  << ((((float) n_time) / CLOCKS_PER_SEC) / l) << "," << ((( (float) e1_time) / CLOCKS_PER_SEC) / l)  << std::endl;
   }
 }
 
