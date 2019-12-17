@@ -32,7 +32,7 @@ void timeTestTransposes(int iterations, int min, int max, bool square, int h) {
   outFile << "size,normal,Eklundh" << std::endl;
 
   rep(i,min,max) {
-      int l = pow(2,i);
+    long l = pow(2,i);
       if (square) {
         h = l;
       }
@@ -50,9 +50,9 @@ void timeTestTransposes(int iterations, int min, int max, bool square, int h) {
       }
 
       clock_t normal_time = timeTranspose(M,iterations);
-      clock_t fast_time = timeTranspose(M,iterations);
+      clock_t fast_time = timefastTranspose(M,iterations);
 
-      outFile << i << "," << (( ((float) normal_time) / CLOCKS_PER_SEC) /  l)  << "," << ((((float) fast_time) / CLOCKS_PER_SEC) / l) << std::endl;
+      outFile << i << "," << (( ((float) normal_time) / CLOCKS_PER_SEC))  << "," << ((((float) fast_time) / CLOCKS_PER_SEC)) << std::endl;
   }
 }
 
