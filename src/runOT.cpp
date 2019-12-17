@@ -37,7 +37,7 @@ std::vector<int> createChoices(int size) {
 }
 
 std::vector<std::vector<std::vector<byte>>> createMessages(int m, int n) {
-  // Create Choices
+  // Create Messages
   std::vector<std::vector<std::string>> msgs;
   rep(i,0,m) {
     std::vector<std::string> msgs_i;
@@ -85,7 +85,7 @@ Point getBasePoint() {
 }
 
 
-void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int size_m, int m) {
+void printResult(std::vector<std::vector<byte>> clear_texts, int size_m, int m) {
   std::cout << "output:" << std::endl;
   for(int j=0; j<m; j++) {
     std::cout << "'";
@@ -94,7 +94,6 @@ void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int 
     }
     std::cout << "'" << std::endl;
   }
-  std::cout << " in time: " << duration << std::endl;
 }
 
 std::vector<std::vector<byte>> perform_OT(std::vector<int> choices, std::vector<std::vector<std::vector<byte>>> messages, ECP ec, Point basePoint, int rounds,int n) {

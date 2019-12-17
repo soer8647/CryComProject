@@ -85,22 +85,23 @@ void runAndPrintOT() {
   auto ec = getEC();
   auto basePoint = getBasePoint();
 
+  std::cout << "Normal OT:" << std::endl;
   auto clear_texts = perform_OT(choices, messages, ec, basePoint, m,n);
-  int duration = 0;
-  printResult(clear_texts, duration, size_message, m);
+  printResult(clear_texts, size_message, m);
 
+  std::cout << "OT Extension:" << std::endl;
   auto chosen_msg = perform_OT_extension(choices, messages, ec, basePoint, m,k);
-  printResult(chosen_msg, duration, size_message, m);
+  printResult(chosen_msg, size_message, m);
 }
 
 int main(int argc, char* argv[]) {
   //testFastTranspose(4,15);
-  //timeTestTransposes(3,5,16);
-  //timeOTk(5, 7, 20);
-  timeTestTransposes(5,5,50,false,128);
-  timeTestTransposes(5,5,50,false,256);
-  timeTestOTFineGrained(5, 100, 150, 128);
+  //timeTestTransposes(5,5,15);
+  //timeOTk(10, 7, 20);
+  //timeTestTransposes(5,9,20,false,128);
+  //timeTestTransposes(5,9,20,false,256);
+  //timeTestOTFineGrained(5, 100, 150, 128);
   //timeTestOT(4,5,15);
-  //runAndPrintOT();
+  runAndPrintOT();
   return 0;
 }

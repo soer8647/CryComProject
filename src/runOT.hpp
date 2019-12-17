@@ -23,6 +23,6 @@ ECP getEC();
 Point getBasePoint();
 std::vector<std::vector<byte>> perform_OT_extension(std::vector<int> choices, std::vector<std::vector<std::vector<byte>>> messages, ECP ec, Point basePoint, int rounds, int k);
 std::vector<std::vector<byte>> perform_OT(std::vector<int> choices, std::vector<std::vector<std::vector<byte>>> messages, ECP ec, Point basePoint, int rounds,int n);
-void printResult(std::vector<std::vector<byte>> clear_texts, long duration, int size_m, int m);
+void printResult(std::vector<std::vector<byte>> clear_texts, int size_m, int m);
 
 #endif
